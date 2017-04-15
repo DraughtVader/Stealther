@@ -61,6 +61,15 @@ public class NinjaController : MonoBehaviour
         }
     }
 
+    protected void OnCollisionEnter2D(Collision2D other)
+    {
+        RopeNode ropeNode = other.gameObject.GetComponent<RopeNode>();
+        if (ropeNode != null)
+        {
+
+        }
+    }
+
     protected void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
