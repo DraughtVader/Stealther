@@ -21,6 +21,7 @@ public class NinjaController : MonoBehaviour
 
     protected RopeController ropeController;
     private new Rigidbody2D rigidbody;
+    private float grabCooldown;
 
     protected void Update()
     {
@@ -36,12 +37,13 @@ public class NinjaController : MonoBehaviour
                 rigidbody.AddForce(direction.normalized);
             }
         }
-        else if (Input.GetMouseButtonUp(1))
+        else if (Input.GetMouseButtonUp(1) || Input.GetKeyDown(KeyCode.Space))
         {
             if (ropeController != null)
             {
                 ropeController.DetachRope();
                 ropeController = null;
+                grabCooldown = -0.5f;
             }
         }
 
@@ -55,18 +57,25 @@ public class NinjaController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 direction = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
-            var projectile = Instantiate(projectilePrefab, transform.position + direction * 1.5f, Quaternion.identity);
+            Vector2 direction = ((Vector2)(Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position)).normalized;
+            var projectile = Instantiate(projectilePrefab, (Vector2)transform.position + direction, Quaternion.identity);
             projectile.GetComponent<Rigidbody2D>().AddForce(direction * projectileSpeed, ForceMode2D.Impulse);
+        }
+
+        if (ropeController == null)
+        {
+            grabCooldown += Time.deltaTime;
         }
     }
 
     protected void OnCollisionEnter2D(Collision2D other)
     {
         RopeNode ropeNode = other.gameObject.GetComponent<RopeNode>();
-        if (ropeNode != null)
+        if (grabCooldown > 0 && ropeController == null && ropeNode != null && ropeNode.RopeController != null)
         {
-
+            ropeController = ropeNode.RopeController;
+            anchoredJoint2D.connectedBody = ropeNode.Rigidbody2D;
+            anchoredJoint2D.enabled = true;
         }
     }
 

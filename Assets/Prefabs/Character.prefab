@@ -165,7 +165,7 @@ MonoBehaviour:
   anchoredJoint2D: {fileID: 232463978488829498}
   ropeWindSpeed: 2.5
   ropeSwaySpeed: 20
-  projectileSpeed: 25
+  projectileSpeed: 15
   ropeControllerPrefab: {fileID: 114338372229092840, guid: e383b3ead7648b141b40536765705dd7,
     type: 2}
   projectilePrefab: {fileID: 1412395111637992, guid: 5b1bdd19a66a8cd459351cacabf12e5f,
