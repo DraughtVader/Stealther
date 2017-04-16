@@ -43,16 +43,21 @@ public class NinjaController : MonoBehaviour
             {
                 ropeController.DetachRope();
                 ropeController = null;
-                grabCooldown = -0.5f;
+                grabCooldown = -0.25f; //TODO sort this out
             }
         }
 
         if (ropeController != null)
         {
             float horizontal = Input.GetAxis("Horizontal");
-            var force = ropeController.FirstRopeNode.right;
-            force.x *= horizontal * ropeSwaySpeed;
-            rigidbody.AddForce(force);
+            if (horizontal != 0)
+            {
+                Vector2 ropeDirection = (transform.position - ropeController.LastRopeNode.position).normalized,
+                        swingDirection = Quaternion.Euler(0, 0, 90 * Mathf.Sign(horizontal)) * ropeDirection;
+
+                Vector2 force = (ropeDirection + swingDirection) * ropeSwaySpeed;
+                rigidbody.AddForceAtPosition(force, transform.position + new Vector3(0,-1));
+            }
         }
 
         if (Input.GetMouseButtonDown(0))

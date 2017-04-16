@@ -21,6 +21,11 @@ public class RopeController : MonoBehaviour
         get { return ropeNodes[0].transform; }
     }
 
+    public Transform LastRopeNode
+    {
+        get { return ropeNodes[ropeNodes.Count - 1].transform; }
+    }
+
     public void AttachRope(Vector2 position, AnchoredJoint2D newBody)
     {
         ropeNodes = new List<RopeNode>();
