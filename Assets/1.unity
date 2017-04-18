@@ -302,12 +302,12 @@ GameObject:
   - component: {fileID: 549848762}
   - component: {fileID: 549848761}
   m_Layer: 8
-  m_Name: roof (1)
+  m_Name: Platforms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &549848761
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -460,12 +460,12 @@ GameObject:
   - component: {fileID: 880204410}
   - component: {fileID: 880204409}
   m_Layer: 8
-  m_Name: roof (2)
+  m_Name: Platforms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &880204409
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -19,7 +19,12 @@ public class NinjaController : MonoBehaviour
     [SerializeField]
     protected GameObject projectilePrefab;
 
-    protected RopeController ropeController;
+    [SerializeField]
+    protected float verticalTime = 0.5f;
+
+    private float verticalUp, verticalDown;
+    private RopeController ropeController,
+                           lastRopeController;
     private new Rigidbody2D rigidbody;
     private float grabCooldown;
 
@@ -31,20 +36,16 @@ public class NinjaController : MonoBehaviour
             var rayHits = Physics2D.Raycast(transform.position, direction, 10.0f, 1 << LayerMask.NameToLayer("Ropables"));
             if (rayHits.transform != null)
             {
+                Detach();
                 ropeController = Instantiate(ropeControllerPrefab, transform.position, Quaternion.identity) as RopeController;
                 ropeController.AttachRope(rayHits.point, anchoredJoint2D);
                 anchoredJoint2D.enabled = true;
                 rigidbody.AddForce(direction.normalized);
             }
         }
-        else if (Input.GetMouseButtonUp(1) || Input.GetKeyDown(KeyCode.Space))
+        else if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (ropeController != null)
-            {
-                ropeController.DetachRope();
-                ropeController = null;
-                grabCooldown = -0.25f; //TODO sort this out
-            }
+            Detach();
         }
 
         if (ropeController != null)
@@ -56,7 +57,7 @@ public class NinjaController : MonoBehaviour
                         swingDirection = Quaternion.Euler(0, 0, 90 * Mathf.Sign(horizontal)) * ropeDirection;
 
                 Vector2 force = (ropeDirection + swingDirection) * ropeSwaySpeed;
-                rigidbody.AddForceAtPosition(force, transform.position + new Vector3(0,-1));
+                rigidbody.AddForceAtPosition(force, transform.position + new Vector3(0, -1));
             }
         }
 
@@ -71,17 +72,76 @@ public class NinjaController : MonoBehaviour
         {
             grabCooldown += Time.deltaTime;
         }
+
+        if (current != null)
+        {
+            float vertical = Input.GetAxis("Vertical");
+            if (vertical != 0)
+            {
+                float check;
+                if (vertical < 0)
+                {
+                    check = verticalDown += Time.deltaTime;
+                    verticalUp = 0.0f;
+                }
+                else
+                {
+                    check = verticalUp += Time.deltaTime;
+                    verticalDown = 0.0f;
+                }
+                if (check >= verticalTime)
+                {
+                    var next = current.RopeController.GetNextRopeNode(current, vertical);
+                    if (next != null)
+                    {
+                        AttachToRopeNode(next);
+                        verticalUp = 0.0f;
+                        verticalDown = 0.0f;
+                    }
+                }
+            }
+        }
     }
 
-    protected void OnCollisionEnter2D(Collision2D other)
+    private void Detach()
+    {
+        if (ropeController != null)
+        {
+            ropeController.DetachRope();
+            lastRopeController = ropeController;
+            ropeController = null;
+            grabCooldown = -0.25f;
+        }
+        current = null;
+    }
+
+    //protected void OnCollisionEnter2D(Collision2D other)
+    //{
+    //    RopeNode ropeNode = other.gameObject.GetComponent<RopeNode>();
+    //    if (grabCooldown > 0 && ropeController == null && ropeNode != null && ropeNode.RopeController != null)
+    //    {
+    //        ropeController = ropeNode.RopeController;
+    //        anchoredJoint2D.connectedBody = ropeNode.Rigidbody2D;
+    //        anchoredJoint2D.enabled = true;
+    //    }
+    //}
+
+    RopeNode current;
+    protected void OnTriggerEnter2D(Collider2D other)
     {
         RopeNode ropeNode = other.gameObject.GetComponent<RopeNode>();
-        if (grabCooldown > 0 && ropeController == null && ropeNode != null && ropeNode.RopeController != null)
+        if (Input.GetKey(KeyCode.Space) && ropeController == null && ropeNode != null && ropeNode.RopeController != null && (lastRopeController != ropeNode.RopeController || grabCooldown > 0))
         {
-            ropeController = ropeNode.RopeController;
-            anchoredJoint2D.connectedBody = ropeNode.Rigidbody2D;
-            anchoredJoint2D.enabled = true;
+            AttachToRopeNode(ropeNode);
         }
+    }
+
+    private void AttachToRopeNode(RopeNode ropeNode)
+    {
+        ropeController = ropeNode.RopeController;
+        anchoredJoint2D.connectedBody = ropeNode.Rigidbody2D;
+        anchoredJoint2D.enabled = true;
+        current = ropeNode;
     }
 
     protected void Start()

@@ -41,7 +41,6 @@ public class RopeController : MonoBehaviour
             var ropeNode = Instantiate(ropeNodePrefab, transform.position, Quaternion.identity) as RopeNode;
             ropeNode.name = "RopeNode" + i;
             ropeNode.RopeController = this;
-            var joint = ropeNode.GetComponent<AnchoredJoint2D>();
             ropeNode.transform.SetParent(transform);
             ropeNodes.Add(ropeNode);
         }
@@ -63,6 +62,10 @@ public class RopeController : MonoBehaviour
     public void CutRope(RopeNode ropeNode)
     {
         int index = ropeNodes.IndexOf(ropeNode);
+        if (index < 0)
+        {
+            return;
+        }
 
         if (ropeNodes.Count <= 8 || index > ropeNodes.Count - 8) //remaining rope is too short, end it
         {
@@ -80,6 +83,24 @@ public class RopeController : MonoBehaviour
         var last = ropeNodes[ropeNodes.Count - 1];
         isAttached = false;
         attachedBody.enabled = false;
+    }
+
+    public RopeNode GetNextRopeNode(RopeNode current, float vertical)
+    {
+        int index = ropeNodes.IndexOf(current);
+        if (index < 0)
+        {
+            return null;
+        }
+
+        if (vertical > 0)
+        {
+            return index == ropeNodes.Count - 1 ? null : ropeNodes[index + 1];
+        }
+        else
+        {
+            return index == 0 ? null : ropeNodes[index - 1];
+        }
     }
 
     protected void Update()
@@ -103,7 +124,7 @@ public class RopeController : MonoBehaviour
 
             for (int i = 0; i < ropeNodes.Count-2; i++)
             {
-                var force = ropeNodes[i].transform.up * 1.75f;
+                var force = ropeNodes[i].transform.up;
                 ropeNodes[i].GetComponent<Rigidbody2D>().AddForce(force, ForceMode2D.Impulse);
             }
         }
@@ -114,11 +135,11 @@ public class RopeController : MonoBehaviour
                 return;
             }
             var first = ropeNodes[0];
-            var newFirst = Instantiate(ropeNodePrefab, transform.position, Quaternion.identity);
+            var newFirst = Instantiate(ropeNodePrefab, first.transform.position, Quaternion.identity);
             newFirst.RopeController = this;
             newFirst.name = "RopeNode";
             var ropeNode = newFirst;
-            newFirst.transform.SetParent(transform);
+            newFirst.transform.parent = transform;
             newFirst.transform.SetAsFirstSibling();
 
             ropeNode.AnchoredJoint2D.connectedBody = first.Rigidbody2D;

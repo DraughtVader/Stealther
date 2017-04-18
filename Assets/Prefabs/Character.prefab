@@ -170,6 +170,7 @@ MonoBehaviour:
     type: 2}
   projectilePrefab: {fileID: 1412395111637992, guid: 5b1bdd19a66a8cd459351cacabf12e5f,
     type: 2}
+  verticalTime: 0.1
 --- !u!212 &212159228617394588
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -255,6 +256,6 @@ DistanceJoint2D:
   m_AutoConfigureConnectedAnchor: 0
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
-  m_AutoConfigureDistance: 1
+  m_AutoConfigureDistance: 0
   m_Distance: 0.1
   m_MaxDistanceOnly: 0
