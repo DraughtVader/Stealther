@@ -42,18 +42,16 @@ public class NinjaController : MonoBehaviour
     [SerializeField]
     protected Transform aimingTransform;
 
-    [SerializeField]
-    protected string ninjaName;
     public string NinjaName
     {
-        get { return ninjaName; }
+        get { return Description.Name; }
     }
 
     [SerializeField]
     protected SpriteRenderer headSprite;
     public Color NinjaColor
     {
-        get { return headSprite.color; }
+        get { return Description.Color; }
     }
 
     private float verticalUp, verticalDown;
@@ -64,6 +62,7 @@ public class NinjaController : MonoBehaviour
     private RopeNode currentRopeNode;
 
     public NinjaState State{ get; set;}
+    public NinjaDescription Description { get; set; }
 
     public void RemoveRopeController()
     {
@@ -100,6 +99,7 @@ public class NinjaController : MonoBehaviour
                 if (input.Jumped)
                 {
                     GameManager.Instance.AddPlayer(this);
+                    headSprite.color = NinjaColor;
                     State = NinjaState.WaitingToPlay;
                 }
                 break;

@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e7206a69b252bb409ef340b5cd125fd, type: 3}
+  m_Name: NinjaBank
+  m_EditorClassIdentifier: 
+  ninjaDescriptions:
+  - Name: Kuro
+    Color: {r: 0, g: 0, b: 0, a: 1}
+    Icon: {fileID: 0}
+  - Name: Shiro
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Icon: {fileID: 0}
+  - Name: Aka
+    Color: {r: 1, g: 0.25735295, b: 0.25735295, a: 1}
+    Icon: {fileID: 0}
+  - Name: Ao
+    Color: {r: 0.120350376, g: 0.28852457, b: 0.7794118, a: 1}
+    Icon: {fileID: 0}
+  - Name: Kiiro
+    Color: {r: 0.9677254, g: 0.97794116, b: 0.23729454, a: 1}
+    Icon: {fileID: 0}
+  - Name: Daidaiiro
+    Color: {r: 1, g: 0.68275857, b: 0, a: 1}
+    Icon: {fileID: 0}
+  - Name: Midori
+    Color: {r: 0.23718825, g: 0.83823526, b: 0.21572232, a: 1}
+    Icon: {fileID: 0}
+  - Name: Murasaki
+    Color: {r: 0.6081517, g: 0.2509191, b: 0.875, a: 1}
+    Icon: {fileID: 0}
+  - Name: Chairo
+    Color: {r: 0.6397059, g: 0.46284604, b: 0.19755623, a: 1}
+    Icon: {fileID: 0}
+  - Name: Haiiro
+    Color: {r: 0.46323532, g: 0.46323532, b: 0.46323532, a: 1}
+    Icon: {fileID: 0}

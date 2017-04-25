@@ -11,8 +11,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     protected int targerWins = 5;
 
+    [SerializeField]
+    protected NinjaBank ninjaBank;
+
     protected Dictionary<NinjaController, int> competingNinjas = new Dictionary<NinjaController, int>();
     protected List<NinjaController> aliveNinjas;
+    private NinjaDescription[] ninjaDescriptions;
 
     public void NinjaKilled(NinjaController ninja)
     {
@@ -26,8 +30,9 @@ public class GameManager : MonoBehaviour
     public void AddPlayer(NinjaController ninja)
     {
         competingNinjas.Add(ninja, 0);
+        ninja.Description = ninjaDescriptions[competingNinjas.Count - 1];
         GameUiManager.Instance.AddPlayer(ninja);
-    } 
+    }
 
     public void AddScore(NinjaController ninja)
     {
@@ -70,6 +75,7 @@ public class GameManager : MonoBehaviour
             Destroy(item.gameObject);
         }
         competingNinjas.Clear();
+        ninjaDescriptions = ninjaBank.GetRandomNinjas(4);
     }
 
     protected virtual void Awake()
@@ -80,6 +86,11 @@ public class GameManager : MonoBehaviour
     protected virtual void OnDestroy()
     {
         Instance = null;
+    }
+
+    protected void Start()
+    {
+        ninjaDescriptions = ninjaBank.GetRandomNinjas(4);
     }
 
     protected string GetScoresAsString()

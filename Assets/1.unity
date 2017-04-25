@@ -846,6 +846,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 150
       objectReference: {fileID: 0}
+    - target: {fileID: 114658838192175560, guid: c8af8fc75fadefe49ab2d6f3aab062a2,
+        type: 2}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c8af8fc75fadefe49ab2d6f3aab062a2, type: 2}
   m_IsPrefabParent: 0
@@ -1499,7 +1504,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a82014a01feddb49b2d6fa9d5fd5ccb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targerWins: 2
+  targerWins: 5
+  ninjaBank: {fileID: 11400000, guid: 61f8b0efbf819eb49abdb72f60033ddd, type: 2}
 --- !u!1 &2080354809
 GameObject:
   m_ObjectHideFlags: 0
