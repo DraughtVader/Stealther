@@ -20,7 +20,14 @@ public class NinjaStarController : ProjectileController
         {
             ropeNode.CutRope();
         }
+        var ninja = other.gameObject.GetComponent<NinjaController>();
+        if (ninja != null && ninja.State == NinjaController.NinjaState.Alive)
+        {
+            GameManager.Instance.NinjaKilled(ninja);
+            ninja.Killed();
+        }
         Destroy(gameObject);
+
     }
 
     protected void OnTriggerEnter2D(Collider2D other)

@@ -6,10 +6,13 @@ public class RopeController : MonoBehaviour
     [SerializeField]
     protected RopeNode ropeNodePrefab;
 
+    [SerializeField]
+    protected int minRopeNodes = 8;
+
     private List<RopeNode> ropeNodes;
     private float ropeNodeDistance;
     private bool isAttached;
-    private AnchoredJoint2D attachedBody;
+    private NinjaController attachedBody;
 
     public bool IsAttached
     {
@@ -26,7 +29,7 @@ public class RopeController : MonoBehaviour
         get { return ropeNodes[ropeNodes.Count - 1].transform; }
     }
 
-    public void AttachRope(Vector2 position, AnchoredJoint2D newBody)
+    public void AttachRope(Vector2 position, NinjaController newBody)
     {
         ropeNodes = new List<RopeNode>();
         ropeNodeDistance = ropeNodePrefab.GetComponent<DistanceJoint2D>().distance;
@@ -44,7 +47,7 @@ public class RopeController : MonoBehaviour
             ropeNode.transform.SetParent(transform);
             ropeNodes.Add(ropeNode);
         }
-        attachedBody.connectedBody = ropeNodes[0].Rigidbody2D;
+        attachedBody.AnchoredJoint2D.connectedBody = ropeNodes[0].Rigidbody2D;
         for (int i = 0; i < ropeNodes.Count - 1; i++)
         {
             ropeNodes[i].AnchoredJoint2D.connectedBody = ropeNodes[i + 1].Rigidbody2D;
@@ -67,7 +70,7 @@ public class RopeController : MonoBehaviour
             return;
         }
 
-        if (ropeNodes.Count <= 8 || index > ropeNodes.Count - 8) //remaining rope is too short, end it
+        if (ropeNodes.Count <= minRopeNodes || index > ropeNodes.Count - minRopeNodes) //remaining rope is too short, end it
         {
             var last = ropeNodes[ropeNodes.Count - 1];
             last.AnchoredJoint2D.enabled = false;
@@ -76,13 +79,29 @@ public class RopeController : MonoBehaviour
         {
             ropeNodes.RemoveRange(0, index);
         }
+
+        if (attachedBody != null)
+        {
+            DetachRope();
+        }
     }
 
     public void DetachRope()
     {
+        if (attachedBody == null)
+        {
+            return;
+        }
         var last = ropeNodes[ropeNodes.Count - 1];
         isAttached = false;
-        attachedBody.enabled = false;
+        attachedBody.AnchoredJoint2D.enabled = false;
+        attachedBody.RemoveRopeController();
+        attachedBody = null;
+    }
+
+    public void AttachNinja(NinjaController ninja)
+    {
+        attachedBody = ninja;
     }
 
     public RopeNode GetNextRopeNode(RopeNode current, float vertical)
@@ -103,49 +122,49 @@ public class RopeController : MonoBehaviour
         }
     }
 
-    protected void Update()
+    public void RopeLengthChange(float vericalAxis)
     {
-        if (!isAttached)
+        if (vericalAxis > 0)
+        {
+            ShortenRope();
+        }
+        else
+        {
+            LengthenRope();
+        }
+    }
+
+    private void ShortenRope()
+    {
+        if (ropeNodes.Count < minRopeNodes)
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            if (ropeNodes.Count < 8)
-            {
-                return;
-            }
-            var last = ropeNodes[ropeNodes.Count - 1];
-            var secondlast = ropeNodes[ropeNodes.Count - 2];
-            secondlast.AnchoredJoint2D.connectedAnchor = last.AnchoredJoint2D.connectedAnchor;
-            secondlast.AnchoredJoint2D.connectedBody = null;
-            ropeNodes.Remove(last);
-            Destroy(last.gameObject);
+        var last = ropeNodes[ropeNodes.Count - 1];
+        var secondlast = ropeNodes[ropeNodes.Count - 2];
+        secondlast.AnchoredJoint2D.connectedAnchor = last.AnchoredJoint2D.connectedAnchor;
+        secondlast.AnchoredJoint2D.connectedBody = null;
+        ropeNodes.Remove(last);
+        Destroy(last.gameObject);
+    }
 
-            for (int i = 0; i < ropeNodes.Count-2; i++)
-            {
-                var force = ropeNodes[i].transform.up;
-                ropeNodes[i].GetComponent<Rigidbody2D>().AddForce(force, ForceMode2D.Impulse);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
+    private void LengthenRope()
+    {
+        if (ropeNodes.Count > 30 || ropeNodes.Count == 0)
         {
-            if (ropeNodes.Count > 30)
-            {
-                return;
-            }
-            var first = ropeNodes[0];
-            var newFirst = Instantiate(ropeNodePrefab, first.transform.position, Quaternion.identity);
-            newFirst.RopeController = this;
-            newFirst.name = "RopeNode";
-            var ropeNode = newFirst;
-            newFirst.transform.parent = transform;
-            newFirst.transform.SetAsFirstSibling();
-
-            ropeNode.AnchoredJoint2D.connectedBody = first.Rigidbody2D;
-            attachedBody.connectedBody = ropeNode.Rigidbody2D;
-            ropeNodes.Insert(0, ropeNode);
+            return;
         }
+        var first = ropeNodes[0];
+        var newFirst = Instantiate(ropeNodePrefab, first.transform.position, Quaternion.identity);
+        newFirst.RopeController = this;
+        newFirst.name = "RopeNode";
+        var ropeNode = newFirst;
+        newFirst.transform.parent = transform;
+        newFirst.transform.SetAsFirstSibling();
+
+        ropeNode.AnchoredJoint2D.connectedBody = first.Rigidbody2D;
+        attachedBody.AnchoredJoint2D.connectedBody = ropeNode.Rigidbody2D;
+        ropeNodes.Insert(0, ropeNode);
     }
 
     private Vector3[] GetNodePositions()
