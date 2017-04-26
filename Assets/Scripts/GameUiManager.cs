@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,17 +23,18 @@ public class GameUiManager : MonoBehaviour
     private int playerCount;
     private float currentCountDown;
     private Action onCountDownComplete;
+    private string colourId = " <color=#{0}>*</color> ";
 
-    public void DisplayScores(string text)
+    public void DisplayScores(Dictionary<NinjaController, int> competingNinjas)
     {
-        scoreText.text = text;
+        scoreText.text = GetScoresAsString(competingNinjas);
         scoresPanel.SetActive(true);
         StartCountDown(GameManager.Instance.StartRound);
     }
 
-    public void DisplayFinalScores(string text)
+    public void DisplayFinalScores(Dictionary<NinjaController, int> competingNinjas)
     {
-        scoreText.text = text;
+        scoreText.text = GetScoresAsString(competingNinjas);
         scoresPanel.SetActive(true);
         StartCountDown(Reset, false, 5.0f);
     }
@@ -96,5 +98,18 @@ public class GameUiManager : MonoBehaviour
     protected virtual void OnDestroy()
     {
         Instance = null;
+    }
+
+    protected string GetScoresAsString(Dictionary<NinjaController, int> competingNinjas)
+    {
+        var scoresSb = new StringBuilder();
+        var ordered = competingNinjas.OrderByDescending(x => x.Value);
+        int size = 60;
+        foreach (var entry in ordered)
+        {
+            scoresSb.AppendFormat("{3}<size={0}>{1} - {2}</size>{3}\n", size, entry.Key.NinjaName, entry.Value, string.Format(colourId, entry.Key.Description.Color.ToHex()));
+            size -= 10;
+        }
+        return scoresSb.ToString();
     }
 }

@@ -111,7 +111,7 @@ public class NinjaController : MonoBehaviour
     private void Aiming()
     {
         aimingTransform.gameObject.SetActive(input.RightStick.magnitude > 0.1f);
-        float angle = Mathf.Atan2(input.InputDevice.RightStickX, input.InputDevice.RightStickY) * 180.0f / Mathf.PI;
+        float angle = Mathf.Atan2(input.RightStick.x, input.RightStick.y) * 180.0f / Mathf.PI;
         aimingTransform.eulerAngles = new Vector3(0, 0, -angle);
     }
 

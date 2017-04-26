@@ -172,6 +172,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1567126752418868, guid: 93f7ee9ced8b4b84ab0e8a33d203850d, type: 2}
+      propertyPath: m_Name
+      value: Character (0)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 93f7ee9ced8b4b84ab0e8a33d203850d, type: 2}
   m_IsPrefabParent: 0
@@ -849,6 +853,25 @@ Prefab:
     - target: {fileID: 114658838192175560, guid: c8af8fc75fadefe49ab2d6f3aab062a2,
         type: 2}
       propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114820868171077174, guid: c8af8fc75fadefe49ab2d6f3aab062a2,
+        type: 2}
+      propertyPath: m_Text
+      value: NINJAS
+      objectReference: {fileID: 0}
+    - target: {fileID: 114002595513081236, guid: c8af8fc75fadefe49ab2d6f3aab062a2,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114820868171077174, guid: c8af8fc75fadefe49ab2d6f3aab062a2,
+        type: 2}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1057723850767584, guid: c8af8fc75fadefe49ab2d6f3aab062a2, type: 2}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

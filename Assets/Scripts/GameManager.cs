@@ -39,12 +39,12 @@ public class GameManager : MonoBehaviour
         competingNinjas[ninja]++;
         if (competingNinjas[ninja] >= targerWins)
         {
-            GameUiManager.Instance.DisplayFinalScores(GetScoresAsString());
+            GameUiManager.Instance.DisplayFinalScores(competingNinjas);
             GameComplete();
         }
         else
         {
-            GameUiManager.Instance.DisplayScores(GetScoresAsString());
+            GameUiManager.Instance.DisplayScores(competingNinjas);
             foreach (var entry in competingNinjas)
             {
                 entry.Key.gameObject.SetActive(true);
@@ -91,18 +91,5 @@ public class GameManager : MonoBehaviour
     protected void Start()
     {
         ninjaDescriptions = ninjaBank.GetRandomNinjas(4);
-    }
-
-    protected string GetScoresAsString()
-    {
-        var scoresSb = new StringBuilder();
-        var ordered = competingNinjas.OrderByDescending(x => x.Value);
-        int size = 60;
-        foreach (var entry in ordered)
-        {
-            scoresSb.AppendFormat("<size={0}>{1} - {2}</size>\n", size, entry.Key.NinjaName, entry.Value);
-            size -= 10;
-        }
-        return scoresSb.ToString();
     }
 }

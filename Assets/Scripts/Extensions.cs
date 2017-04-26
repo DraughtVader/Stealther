@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using Random = System.Random;
 
 internal static class RandomExtensions
 {
@@ -27,5 +28,12 @@ internal static class RandomExtensions
             list[n] = list[k];
             list[k] = temp;
         }
+    }
+
+    public static string ToHex(this Color colour)
+    {
+        Color32 c = colour;
+        var hex = string.Format("{0:X2}{1:X2}{2:X2}{3:X2}", c.r, c.g, c.b, c.a);
+        return hex;
     }
 }

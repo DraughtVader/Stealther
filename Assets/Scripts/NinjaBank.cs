@@ -15,7 +15,7 @@ public class NinjaBank : ScriptableObject
     public NinjaDescription[] GetRandomNinjas(int count)
     {
         var randoms = new List<int>();
-        for (var i = 0; i < count; i++)
+        for (var i = 0; i < Count; i++)
         {
             randoms.Add(i);
         }
