@@ -73,14 +73,14 @@ public class NinjaController : MonoBehaviour
     {
         if (State == NinjaState.Alive)
         {
-            gameObject.SetActive(false);
+            transform.position = new Vector3(100, 100);
+            rigidbody.isKinematic = true;
             State = NinjaState.Dead;
         }
     }
 
     public void SetToJoinable()
     {
-        gameObject.SetActive(true);
         State = NinjaState.WaitingToJoin;
     }
 
@@ -243,16 +243,40 @@ public class NinjaController : MonoBehaviour
         currentRopeNode = ropeNode;
     }
 
-    protected void Start()
+    private void OnRoundStart()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
-        if (input.InputDevice == null)
+        if (State != NinjaState.Alive)
         {
-            Destroy(gameObject);
+            State = NinjaState.NotPlaying;
+            transform.position = new Vector3(100, 100);
+            rigidbody.isKinematic = true;
         }
         else
         {
-            State = NinjaState.WaitingToJoin;
+            rigidbody.isKinematic = false;
+            rigidbody.velocity = Vector2.zero;
         }
+    }
+
+    private void OnRoundEnd()
+    {
+        Detach();
+        rigidbody.isKinematic = true;
+        State = NinjaState.WaitingToPlay;
+    }
+
+    private void OnMatchFinished()
+    {
+        SetToJoinable();
+    }
+
+    protected void Start()
+    {
+        rigidbody = GetComponent<Rigidbody2D>();
+        State = NinjaState.WaitingToJoin;
+
+        GameManager.Instance.RoundStart += OnRoundStart;
+        GameManager.Instance.RoundEnd += OnRoundEnd;
+        GameManager.Instance.MatchFinished += OnMatchFinished;
     }
 }

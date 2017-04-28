@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class RopeController : MonoBehaviour
 {
+    private static List<RopeController> ropes;
+
     [SerializeField]
     protected RopeNode ropeNodePrefab;
 
@@ -27,6 +29,20 @@ public class RopeController : MonoBehaviour
     public Transform LastRopeNode
     {
         get { return ropeNodes[ropeNodes.Count - 1].transform; }
+    }
+
+    public static void DestroyAllRopes()
+    {
+        if (ropes == null)
+        {
+            return;
+        }
+        int length = ropes.Count;
+        for (int i = 0; i < length; i++)
+        {
+            Destroy(ropes[i].gameObject);;
+        }
+        ropes.Clear();
     }
 
     public void AttachRope(Vector2 position, NinjaController newBody)
@@ -175,5 +191,19 @@ public class RopeController : MonoBehaviour
             positions[i] = ropeNodes[i].transform.position;
         }
         return positions;
+    }
+
+    private void Start()
+    {
+        if (ropes == null)
+        {
+            ropes = new List<RopeController>();
+        }
+        ropes.Add(this);
+    }
+
+    private void OnDestroy()
+    {
+        ropes.Remove(this);
     }
 }

@@ -13,12 +13,21 @@ public class ProjectileLauncherController : MonoBehaviour
     [SerializeField]
     protected float projectileSpeed;
 
-    protected void Update ()
+    private new Animation animation;
+
+    public void FireProjectile()
     {
-	    if (Input.GetKeyDown(KeyCode.Q))
-        {
-            var projectile = Instantiate(projectilePrefab, transform.position + (Vector3)direction * 0.5f, Quaternion.identity);
-            projectile.GetComponent<Rigidbody2D>().AddForce(direction * projectileSpeed, ForceMode2D.Impulse);
-        }	
-	}
+        animation.Play("StarLaunch");
+    }
+
+    private void Fire()
+    {
+        var projectile = Instantiate(projectilePrefab, transform.position + (Vector3)direction * 0.5f, Quaternion.identity);
+        projectile.GetComponent<Rigidbody2D>().AddForce(direction * projectileSpeed, ForceMode2D.Impulse);
+    }
+
+    private void Start()
+    {
+        animation = GetComponent<Animation>();
+    }
 }

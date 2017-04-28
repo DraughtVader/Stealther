@@ -39,10 +39,7 @@ public class NinjaInputManager : MonoBehaviour
 
     public bool Attacked
     {
-        get
-        {
-            return InputDevice != null && (!InputDevice.RightTrigger.LastState && InputDevice.RightTrigger.IsPressed);
-        }
+        get { return InputDevice != null && (!InputDevice.RightTrigger.LastState && InputDevice.RightTrigger.IsPressed); }
     }
 
     public Vector2 LeftStick

@@ -23,20 +23,34 @@ public class GameUiManager : MonoBehaviour
     private int playerCount;
     private float currentCountDown;
     private Action onCountDownComplete;
-    private string colourId = " <color=#{0}>*</color> ";
+    private const string COLOUR_ID = " <color=#{0}>*</color> ";
+    private bool matchCompete, newOnComplete;
 
     public void DisplayScores(Dictionary<NinjaController, int> competingNinjas)
     {
         scoreText.text = GetScoresAsString(competingNinjas);
-        scoresPanel.SetActive(true);
-        StartCountDown(GameManager.Instance.StartRound);
+        matchCompete = false;
+        StartCountDown(ShowScorePanel, false, 2.0f);
     }
 
     public void DisplayFinalScores(Dictionary<NinjaController, int> competingNinjas)
     {
         scoreText.text = GetScoresAsString(competingNinjas);
+        matchCompete = true;
+        StartCountDown(ShowScorePanel, false, 2.0f);
+    }
+
+    private void ShowScorePanel()
+    {
         scoresPanel.SetActive(true);
-        StartCountDown(Reset, false, 5.0f);
+        if (matchCompete)
+        {
+            StartCountDown(Reset, false, 5.0f);
+        }
+        else
+        {
+            StartCountDown(GameManager.Instance.StartRound);
+        }
     }
 
     public void HideAll()
@@ -50,6 +64,7 @@ public class GameUiManager : MonoBehaviour
         onCountDownComplete = onComplete;
         currentCountDown = duration;
         countdownText.gameObject.SetActive(display);
+        newOnComplete = true;
     }
 
     public void AddPlayer(NinjaController ninja)
@@ -85,8 +100,12 @@ public class GameUiManager : MonoBehaviour
                 return;
             }
             onCountDownComplete();
-            onCountDownComplete = null;
-            countdownText.gameObject.SetActive(false);
+            if (!newOnComplete)
+            {
+                onCountDownComplete = null;
+                countdownText.gameObject.SetActive(false);
+            }
+            newOnComplete = false;
         }
     }
 
@@ -107,7 +126,7 @@ public class GameUiManager : MonoBehaviour
         int size = 60;
         foreach (var entry in ordered)
         {
-            scoresSb.AppendFormat("{3}<size={0}>{1} - {2}</size>{3}\n", size, entry.Key.NinjaName, entry.Value, string.Format(colourId, entry.Key.Description.Color.ToHex()));
+            scoresSb.AppendFormat("{3}<size={0}>{1} - {2}</size>{3}\n", size, entry.Key.NinjaName, entry.Value, string.Format(COLOUR_ID, entry.Key.Description.Color.ToHex()));
             size -= 10;
         }
         return scoresSb.ToString();

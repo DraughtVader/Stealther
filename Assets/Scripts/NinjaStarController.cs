@@ -23,8 +23,8 @@ public class NinjaStarController : ProjectileController
         var ninja = other.gameObject.GetComponent<NinjaController>();
         if (ninja != null && ninja.State == NinjaController.NinjaState.Alive)
         {
-            GameManager.Instance.NinjaKilled(ninja);
             ninja.Killed();
+            GameManager.Instance.NinjaKilled(ninja, transform.position);
         }
         Destroy(gameObject);
 

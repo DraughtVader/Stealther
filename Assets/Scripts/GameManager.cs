@@ -1,30 +1,38 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System.Text;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public Action RoundStart, RoundEnd, MatchFinished;
+
     [SerializeField]
     protected int targerWins = 5;
 
     [SerializeField]
+    protected GameObject splatterPfx;
+
+    [SerializeField]
     protected NinjaBank ninjaBank;
+
+    [SerializeField]
+    protected SpawnManager spawnManager;
 
     protected Dictionary<NinjaController, int> competingNinjas = new Dictionary<NinjaController, int>();
     protected List<NinjaController> aliveNinjas;
     private NinjaDescription[] ninjaDescriptions;
 
-    public void NinjaKilled(NinjaController ninja)
+    public void NinjaKilled(NinjaController ninja, Vector3 deathPosition)
     {
         aliveNinjas.Remove(ninja);
         if (aliveNinjas.Count == 1)
         {
             AddScore(aliveNinjas[0]);
         }
+        Instantiate(splatterPfx, deathPosition, Quaternion.identity);
     }
 
     public void AddPlayer(NinjaController ninja)
@@ -45,35 +53,43 @@ public class GameManager : MonoBehaviour
         else
         {
             GameUiManager.Instance.DisplayScores(competingNinjas);
-            foreach (var entry in competingNinjas)
+            if (RoundEnd != null)
             {
-                entry.Key.gameObject.SetActive(true);
-                entry.Key.State = NinjaController.NinjaState.WaitingToPlay;
+                RoundEnd();
             }
+            RopeController.DestroyAllRopes();
         }
     }
 
     public void StartRound()
     {
+        var spawnPoints = spawnManager.SpawnPoints;
         GameUiManager.Instance.HideAll();
         aliveNinjas = competingNinjas.Keys.ToList();
-        foreach (var item in aliveNinjas)
+        var length = aliveNinjas.Count;
+        for (var i = 0; i < length; i++)
         {
+            var item = aliveNinjas[i];
             item.gameObject.SetActive(true);
             item.State = NinjaController.NinjaState.Alive;
+            item.transform.position = spawnPoints[i].position;
+        }
+
+        if (RoundStart != null)
+        {
+            RoundStart();
         }
     }
 
     protected void GameComplete()
     {
-        foreach (var entry in competingNinjas)
+        if (MatchFinished != null)
         {
-            entry.Key.SetToJoinable();
+            MatchFinished();
         }
-        foreach (var item in FindObjectsOfType<RopeController>()) //TODO obvs
-        {
-            Destroy(item.gameObject);
-        }
+
+        RopeController.DestroyAllRopes();
+
         competingNinjas.Clear();
         ninjaDescriptions = ninjaBank.GetRandomNinjas(4);
     }
