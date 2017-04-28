@@ -78,7 +78,7 @@ public class NinjaController : MonoBehaviour
 
     public void Killed()
     {
-        if (State == NinjaState.Alive)
+        if (State == NinjaState.Alive || State == NinjaState.Stunned)
         {
             transform.position = new Vector3(100, 100);
             rigidbody.isKinematic = true;
