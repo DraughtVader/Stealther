@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     protected SpawnManager spawnManager;
 
+    [SerializeField]
+    protected SlowMoController slowMoController;
+
     protected Dictionary<NinjaController, int> competingNinjas = new Dictionary<NinjaController, int>();
     protected List<NinjaController> aliveNinjas;
     private NinjaDescription[] ninjaDescriptions;
@@ -48,21 +51,45 @@ public class GameManager : MonoBehaviour
         if (competingNinjas[ninja] >= targerWins)
         {
             GameUiManager.Instance.DisplayFinalScores(competingNinjas);
-            GameComplete();
         }
         else
         {
             GameUiManager.Instance.DisplayScores(competingNinjas);
-            if (RoundEnd != null)
-            {
-                RoundEnd();
-            }
-            RopeController.DestroyAllRopes();
         }
+        if (RoundEnd != null)
+        {
+            RoundEnd();
+        }
+    }
+
+    public NinjaController GetClosestNinja(Vector3 position)
+    {
+        if (aliveNinjas.Count <= 1)
+        {
+            return null;
+        }
+
+        int clostestIndex = 0,
+            length = aliveNinjas.Count;
+        var closestDistance = Vector2.Distance(position, aliveNinjas[0].transform.position);
+
+        for (var i = 1; i < length; i++)
+        {
+            var currentDistance = Vector2.Distance(position, aliveNinjas[i].transform.position);
+            if (currentDistance < closestDistance)
+            {
+                closestDistance = currentDistance;
+                clostestIndex = i;
+            }
+        }
+        return aliveNinjas[clostestIndex];
+
     }
 
     public void StartRound()
     {
+        RopeController.DestroyAllRopes();
+
         var spawnPoints = spawnManager.SpawnPoints;
         GameUiManager.Instance.HideAll();
         aliveNinjas = competingNinjas.Keys.ToList();
@@ -81,7 +108,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    protected void GameComplete()
+    public void GameComplete()
     {
         if (MatchFinished != null)
         {

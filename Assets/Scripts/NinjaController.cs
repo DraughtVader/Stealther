@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ public class NinjaController : MonoBehaviour
 {
     public enum NinjaState
     {
-        NotPlaying, WaitingToJoin, WaitingToPlay, Alive, Dead
+        NotPlaying, WaitingToJoin, WaitingToPlay, Alive, Dead, Stunned
     }
 
     [SerializeField]
@@ -20,7 +21,9 @@ public class NinjaController : MonoBehaviour
     [SerializeField]
     protected float ropeWindSpeed = 2.5f,
                     ropeSwaySpeed = 2.5f,
-                    projectileSpeed = 5.0f;
+                    projectileSpeed = 5.0f,
+                    stunDuration = 1.0f,
+                    minVelocityForStun = 7.0f;
 
     [SerializeField]
     protected RopeController ropeControllerPrefab;
@@ -42,6 +45,9 @@ public class NinjaController : MonoBehaviour
     [SerializeField]
     protected Transform aimingTransform;
 
+    [SerializeField]
+    protected ParticleSystem stunPfx;
+
     public string NinjaName
     {
         get { return Description.Name; }
@@ -58,8 +64,9 @@ public class NinjaController : MonoBehaviour
     private RopeController ropeController,
                            lastRopeController;
     private new Rigidbody2D rigidbody;
-    private float grabCooldown;
+    private float grabCooldown, lastVelocity;
     private RopeNode currentRopeNode;
+    private DateTime unstunTime;
 
     public NinjaState State{ get; set;}
     public NinjaDescription Description { get; set; }
@@ -105,7 +112,19 @@ public class NinjaController : MonoBehaviour
                 break;
             case NinjaState.WaitingToPlay:
                 break;
+            case NinjaState.Stunned:
+                if (DateTime.Now >= unstunTime)
+                {
+                    State = NinjaState.Alive;
+                    stunPfx.Stop();
+                }
+                break;
         }
+    }
+
+    protected void LateUpdate()
+    {
+        lastVelocity = rigidbody.velocity.magnitude;
     }
 
     private void Aiming()
@@ -131,6 +150,7 @@ public class NinjaController : MonoBehaviour
 
         var projectile = Instantiate(projectilePrefab, (Vector2)transform.position + direction, Quaternion.identity);
         projectile.GetComponent<Rigidbody2D>().AddForce(direction * projectileSpeed, ForceMode2D.Impulse);
+        projectile.GetComponent<NinjaStarController>().Thrower = this;
     }
 
     private void Roping()
@@ -234,6 +254,17 @@ public class NinjaController : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (lastVelocity >= minVelocityForStun)
+        {
+            State = NinjaState.Stunned;
+            unstunTime = DateTime.Now.AddSeconds(stunDuration);
+            stunPfx.Play();
+            Detach();
+        }
+    }
+
     private void AttachToRopeNode(RopeNode ropeNode)
     {
         ropeController = ropeNode.RopeController;
@@ -245,6 +276,8 @@ public class NinjaController : MonoBehaviour
 
     private void OnRoundStart()
     {
+        Detach();
+
         if (State != NinjaState.Alive)
         {
             State = NinjaState.NotPlaying;
@@ -260,8 +293,6 @@ public class NinjaController : MonoBehaviour
 
     private void OnRoundEnd()
     {
-        Detach();
-        rigidbody.isKinematic = true;
         State = NinjaState.WaitingToPlay;
     }
 

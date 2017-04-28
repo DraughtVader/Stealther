@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,7 +46,7 @@ public class GameUiManager : MonoBehaviour
         scoresPanel.SetActive(true);
         if (matchCompete)
         {
-            StartCountDown(Reset, false, 5.0f);
+            StartCountDown(Reset, true, 5.0f);
         }
         else
         {
@@ -87,6 +88,7 @@ public class GameUiManager : MonoBehaviour
             item.GetComponentInChildren<Text>().text = "PRESS A";
         }
         playerCount = 0;
+        GameManager.Instance.GameComplete();
     }
 
     private void Update()
@@ -129,6 +131,7 @@ public class GameUiManager : MonoBehaviour
             scoresSb.AppendFormat("{3}<size={0}>{1} - {2}</size>{3}\n", size, entry.Key.NinjaName, entry.Value, string.Format(COLOUR_ID, entry.Key.Description.Color.ToHex()));
             size -= 10;
         }
+        scoresSb.Remove(scoresSb.Length - 2, 2); //remove the last "\n" added
         return scoresSb.ToString();
     }
 }
