@@ -11,18 +11,23 @@ public class SecretNinjaStartsController : MonoBehaviour
     protected Vector2 frequencyRange = new Vector2(5, 7);
 
     private DateTime fireTime;
+    private bool active;
 
     private void Start()
     {
-        SetUpTimes();
+        GameManager.Instance.RoundStart += SetUpTimes;
+        GameManager.Instance.RoundEnd += StopProjectiles;
     }
 
     private void Update()
     {
-        if (DateTime.Now >= fireTime)
+        if (active && DateTime.Now >= fireTime)
         {
-            var launcher = launchers[Random.Range(0, launchers.Length)];
-            launcher.FireProjectile();
+            if (GameManager.Instance.GameState == GameManager.State.Playing)
+            {
+                var launcher = launchers[Random.Range(0, launchers.Length)];
+                launcher.FireProjectile();
+            }
             SetUpTimes();
         }
     }
@@ -30,6 +35,12 @@ public class SecretNinjaStartsController : MonoBehaviour
     private void SetUpTimes()
     {
         fireTime = DateTime.Now.AddSeconds(Random.Range(frequencyRange.x, frequencyRange.y));
+        active = true;
+    }
+
+    private void StopProjectiles()
+    {
+        active = false;
     }
 
 }

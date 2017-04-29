@@ -13,7 +13,7 @@ public class Hazard : MonoBehaviour
         OnCollision(other.gameObject);
     }
 
-    private void OnCollision(GameObject other)
+    protected virtual void OnCollision(GameObject other)
     {
         var ropeNode = other.GetComponent<RopeNode>();
         if (ropeNode)
@@ -21,7 +21,7 @@ public class Hazard : MonoBehaviour
             ropeNode.CutRope();
         }
         var ninja = other.GetComponent<NinjaController>();
-        if (ninja != null && ninja.State == NinjaController.NinjaState.Alive)
+        if (ninja != null && ninja.IsKillable)
         {
             ninja.Killed();
             GameManager.Instance.NinjaKilled(ninja, transform.position);

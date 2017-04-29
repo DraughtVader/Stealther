@@ -36,7 +36,7 @@ public class GameUiManager : MonoBehaviour
 
     public void DisplayFinalScores(Dictionary<NinjaController, int> competingNinjas)
     {
-        scoreText.text = GetScoresAsString(competingNinjas);
+        scoreText.text = GetFinalScoresAsString(competingNinjas);
         matchCompete = true;
         StartCountDown(ShowScorePanel, false, 2.0f);
     }
@@ -125,13 +125,25 @@ public class GameUiManager : MonoBehaviour
     {
         var scoresSb = new StringBuilder();
         var ordered = competingNinjas.OrderByDescending(x => x.Value);
-        int size = 60;
+        var size = 60;
         foreach (var entry in ordered)
         {
             scoresSb.AppendFormat("{3}<size={0}>{1} - {2}</size>{3}\n", size, entry.Key.NinjaName, entry.Value, string.Format(COLOUR_ID, entry.Key.Description.Color.ToHex()));
             size -= 10;
         }
         scoresSb.Remove(scoresSb.Length - 2, 2); //remove the last "\n" added
+        return scoresSb.ToString();
+    }
+
+    protected string GetFinalScoresAsString(Dictionary<NinjaController, int> competingNinjas)
+    {
+        var scoresSb = new StringBuilder();
+        var ordered = competingNinjas.OrderByDescending(x => x.Value);
+        foreach (var entry in ordered)
+        {
+            scoresSb.AppendFormat("{2}<size={0}>{1} wins!</size>{2}", 60, entry.Key.NinjaName, string.Format(COLOUR_ID, entry.Key.Description.Color.ToHex()));
+            break;
+        }
         return scoresSb.ToString();
     }
 }

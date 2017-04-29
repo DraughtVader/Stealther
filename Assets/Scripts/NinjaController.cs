@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class NinjaController : MonoBehaviour
@@ -71,6 +69,11 @@ public class NinjaController : MonoBehaviour
     public NinjaState State{ get; set;}
     public NinjaDescription Description { get; set; }
 
+    public bool IsKillable
+    {
+        get { return State == NinjaState.Alive || State == NinjaState.Stunned; }
+    }
+
     public void RemoveRopeController()
     {
         ropeController = null;
@@ -78,11 +81,12 @@ public class NinjaController : MonoBehaviour
 
     public void Killed()
     {
-        if (State == NinjaState.Alive || State == NinjaState.Stunned)
+        if (IsKillable)
         {
             transform.position = new Vector3(100, 100);
             rigidbody.isKinematic = true;
             State = NinjaState.Dead;
+            Detach();
         }
     }
 

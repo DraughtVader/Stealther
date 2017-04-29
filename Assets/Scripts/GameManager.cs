@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using InControl;
 
 public class GameManager : MonoBehaviour
 {
+    public enum State
+    {
+        PlayerScreen, Playing, RoundScore, MatchScore
+    }
+
     public static GameManager Instance;
 
     public Action RoundStart, RoundEnd, MatchFinished;
@@ -28,6 +34,8 @@ public class GameManager : MonoBehaviour
     protected List<NinjaController> aliveNinjas;
     private NinjaDescription[] ninjaDescriptions;
 
+    public State GameState { get; set; }
+
     public void NinjaKilled(NinjaController ninja, Vector3 deathPosition)
     {
         aliveNinjas.Remove(ninja);
@@ -35,7 +43,19 @@ public class GameManager : MonoBehaviour
         {
             AddScore(aliveNinjas[0]);
         }
-        Instantiate(splatterPfx, deathPosition, Quaternion.identity);
+
+        var colliders = Physics2D.OverlapCircleAll(deathPosition, 2.0f);
+        int length = colliders.Length,
+                     count = 0;
+        var splatter = Instantiate(splatterPfx, deathPosition, Quaternion.identity);
+        var pfx = splatter.GetComponent<ParticleSystem>();
+        for (var i = 0; i < length; i++)
+        {
+            if (colliders[i].GetComponent<Bloodable>())
+            {
+                pfx.trigger.SetCollider(count++, colliders[i]);
+            }
+        }
     }
 
     public void AddPlayer(NinjaController ninja)
@@ -51,10 +71,12 @@ public class GameManager : MonoBehaviour
         if (competingNinjas[ninja] >= targerWins)
         {
             GameUiManager.Instance.DisplayFinalScores(competingNinjas);
+            GameState = State.MatchScore;
         }
         else
         {
             GameUiManager.Instance.DisplayScores(competingNinjas);
+            GameState = State.RoundScore;
         }
         if (RoundEnd != null)
         {
@@ -106,6 +128,7 @@ public class GameManager : MonoBehaviour
         {
             RoundStart();
         }
+        GameState = State.Playing;
     }
 
     public void GameComplete()
@@ -119,6 +142,10 @@ public class GameManager : MonoBehaviour
 
         competingNinjas.Clear();
         ninjaDescriptions = ninjaBank.GetRandomNinjas(4);
+
+        GameState = State.PlayerScreen;
+        Destroy(BloodSplatterFX.bloodSpatterParent.gameObject);
+        BloodSplatterFX.bloodSpatterParent = null;
     }
 
     protected virtual void Awake()

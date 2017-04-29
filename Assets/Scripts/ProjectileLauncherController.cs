@@ -30,4 +30,16 @@ public class ProjectileLauncherController : MonoBehaviour
     {
         animation = GetComponent<Animation>();
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        Vector2 point = transform.position,
+            velocity = direction * projectileSpeed;
+        for (int i = 0; i < 20; i++)
+        {
+            point += velocity * 0.1f;
+            Gizmos.DrawSphere(point, 0.1f);
+            velocity += Physics2D.gravity * 0.1f;
+        }
+    }
 }
