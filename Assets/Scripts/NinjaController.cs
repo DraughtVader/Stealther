@@ -8,6 +8,16 @@ public class NinjaController : MonoBehaviour
         NotPlaying, WaitingToJoin, WaitingToPlay, Alive, Dead, Stunned
     }
 
+    public enum AmmoType
+    {
+        Normal, Phase, Multiple, Ricochet
+    }
+
+    public enum ShieldType
+    {
+        None, Phase, Block, Ricochet
+    }
+
     [SerializeField]
     protected AnchoredJoint2D anchoredJoint2D;
 
@@ -34,17 +44,24 @@ public class NinjaController : MonoBehaviour
     }
 
     [SerializeField]
-    protected GameObject projectilePrefab;
+    protected GameObject projectilePrefab,
+        phaseProjectilePrefab;
 
     [SerializeField]
     protected float verticalTime = 0.5f,
-                    verticalRopeLengthTime = 1.0f;
+                    verticalRopeLengthTime = 1.0f,
+                    totalThrowStamina = 5,
+                    throwStaminaDrain = 1,
+                    staminaRecoverySpeed = 0.25f;
 
     [SerializeField]
     protected Transform aimingTransform;
 
     [SerializeField]
-    protected ParticleSystem stunPfx;
+    protected ParticleSystem stunPfx,
+        phasePfx,
+        phaseShieldPfx,
+        fatiguedPfx;
 
     public string NinjaName
     {
@@ -65,13 +82,28 @@ public class NinjaController : MonoBehaviour
     private float grabCooldown, lastVelocity;
     private RopeNode currentRopeNode;
     private DateTime unstunTime;
+    private AmmoType ammoType;
+    private int specialAmmoCount;
+    private float shieldUpTime;
+    private float throwStamina;
+    private bool staminaDepleted;
 
     public NinjaState State{ get; set;}
     public NinjaDescription Description { get; set; }
 
+    public ShieldType Shield { get; private set; }
+
     public bool IsKillable
     {
-        get { return State == NinjaState.Alive || State == NinjaState.Stunned; }
+        get
+        {
+            return (State == NinjaState.Alive || State == NinjaState.Stunned) && Shield == ShieldType.None;
+        }
+    }
+
+    public bool DestroyProjectileOnHit
+    {
+        get { return Shield != ShieldType.Phase; }
     }
 
     public void RemoveRopeController()
@@ -103,6 +135,7 @@ public class NinjaController : MonoBehaviour
                 Roping();
                 Attacking();
                 Aiming();
+                Shielding();
                 break;
             case NinjaState.Dead:
                 break;
@@ -126,6 +159,20 @@ public class NinjaController : MonoBehaviour
         }
     }
 
+    private void Shielding()
+    {
+        if (Shield == ShieldType.None)
+        {
+            return;
+        }
+        shieldUpTime -= Time.deltaTime;
+        if (shieldUpTime <= 0)
+        {
+            Shield = ShieldType.None;
+            phaseShieldPfx.Stop();
+        }
+    }
+
     protected void LateUpdate()
     {
         lastVelocity = rigidbody.velocity.magnitude;
@@ -140,7 +187,14 @@ public class NinjaController : MonoBehaviour
 
     private void Attacking()
     {
-        if (!input.Attacked)
+        throwStamina = Mathf.Clamp(throwStamina + Time.deltaTime * staminaRecoverySpeed, -1, totalThrowStamina);
+        if (throwStamina >= totalThrowStamina)
+        {
+            staminaDepleted = false;
+            fatiguedPfx.Stop();
+        }
+
+        if (!input.Attacked || staminaDepleted)
         {
             return;
         }
@@ -152,9 +206,41 @@ public class NinjaController : MonoBehaviour
             return;
         }
 
-        var projectile = Instantiate(projectilePrefab, (Vector2)transform.position + direction, Quaternion.identity);
+        GameObject currentProjectile;
+        switch (ammoType)
+        {
+            case AmmoType.Normal:
+                currentProjectile = projectilePrefab;
+                break;
+            case AmmoType.Phase:
+                currentProjectile = phaseProjectilePrefab;
+                break;
+            default:
+                currentProjectile = projectilePrefab;
+                break;
+        }
+        if (ammoType != AmmoType.Normal)
+        {
+            specialAmmoCount--;
+            if (specialAmmoCount == 0)
+            {
+                ammoType = AmmoType.Normal;
+                phasePfx.Stop();
+                //TODO reset visual effects
+            }
+        }
+
+
+        var projectile = Instantiate(currentProjectile, (Vector2)transform.position + direction, Quaternion.identity);
         projectile.GetComponent<Rigidbody2D>().AddForce(direction * projectileSpeed, ForceMode2D.Impulse);
         projectile.GetComponent<NinjaStarController>().Thrower = this;
+
+        throwStamina -= throwStaminaDrain;
+        if (throwStamina <= 0)
+        {
+            staminaDepleted = true;
+            fatiguedPfx.Play();
+        }
     }
 
     private void Roping()
@@ -281,6 +367,8 @@ public class NinjaController : MonoBehaviour
     private void OnRoundStart()
     {
         Detach();
+        throwStamina = totalThrowStamina;
+        staminaDepleted = false;
 
         if (State != NinjaState.Alive)
         {
@@ -298,6 +386,10 @@ public class NinjaController : MonoBehaviour
     private void OnRoundEnd()
     {
         State = NinjaState.WaitingToPlay;
+        ammoType = AmmoType.Normal;
+        Shield = ShieldType.None;
+        phasePfx.Stop();
+        phaseShieldPfx.Stop();
     }
 
     private void OnMatchFinished()
@@ -313,5 +405,24 @@ public class NinjaController : MonoBehaviour
         GameManager.Instance.RoundStart += OnRoundStart;
         GameManager.Instance.RoundEnd += OnRoundEnd;
         GameManager.Instance.MatchFinished += OnMatchFinished;
+    }
+
+    public void PickUp(PickUp.Type type)
+    {
+        switch (type)
+        {
+            case global::PickUp.Type.PhaseStar:
+                ammoType = AmmoType.Phase;
+                specialAmmoCount = 5;
+                phasePfx.Play();
+                break;
+            case global::PickUp.Type.PhaseShield:
+                Shield = ShieldType.Phase;
+                shieldUpTime = 5.0f;
+                phaseShieldPfx.Play();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException("type", type, null);
+        }
     }
 }

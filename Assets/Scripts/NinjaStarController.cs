@@ -22,17 +22,13 @@ public class NinjaStarController : Hazard
     protected override void OnCollisionEnter2D(Collision2D other)
     {
         base.OnCollisionEnter2D(other);
-        Destroy(gameObject);
+        PostCollision(other.gameObject);
     }
 
     protected override void OnTriggerEnter2D(Collider2D other)
     {
-        var ropeNode = other.gameObject.GetComponent<RopeNode>();
-        if (ropeNode)
-        {
-            ropeNode.CutRope();
-        }
-        Destroy(gameObject);
+        base.OnTriggerEnter2D(other);
+        PostCollision(other.gameObject);
     }
 
     private void SlowMo()
@@ -56,9 +52,23 @@ public class NinjaStarController : Hazard
         }
     }
 
+    protected virtual void PostCollision(GameObject other)
+    {
+        var ninja = other.GetComponent<NinjaController>();
+        if (ninja == null || ninja.DestroyProjectileOnHit)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void OnDestroy()
     {
-        if (!SlowMoController.Instance.CanDoSlowMo(gameObject))
+        StopSlowMo();
+    }
+
+    protected virtual void StopSlowMo()
+    {
+        if (SlowMoController.Instance == null || !SlowMoController.Instance.CanDoSlowMo(gameObject))
         {
             return;
         }

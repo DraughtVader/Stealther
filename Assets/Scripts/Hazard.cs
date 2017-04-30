@@ -26,5 +26,6 @@ public class Hazard : MonoBehaviour
             ninja.Killed();
             GameManager.Instance.NinjaKilled(ninja, transform.position);
         }
+
     }
 }
