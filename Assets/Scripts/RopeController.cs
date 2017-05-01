@@ -23,12 +23,18 @@ public class RopeController : MonoBehaviour
 
     public Transform FirstRopeNode
     {
-        get { return ropeNodes[0].transform; }
+        get
+        {
+            return ropeNodes.Count < 1 ? null : ropeNodes[0].transform;
+        }
     }
 
     public Transform LastRopeNode
     {
-        get { return ropeNodes[ropeNodes.Count - 1].transform; }
+        get
+        {
+            return ropeNodes.Count < 1 ? null : ropeNodes[ropeNodes.Count - 1].transform;
+        }
     }
 
     public static void DestroyAllRopes()

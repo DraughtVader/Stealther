@@ -191,7 +191,7 @@ public class NinjaController : MonoBehaviour
         if (throwStamina >= totalThrowStamina)
         {
             staminaDepleted = false;
-            fatiguedPfx.Stop();
+            StopParticleSystem(fatiguedPfx, true);
         }
 
         if (!input.Attacked || staminaDepleted)
@@ -263,7 +263,7 @@ public class NinjaController : MonoBehaviour
             Detach();
         }
 
-        if (ropeController != null)
+        if (ropeController != null && ropeController.LastRopeNode != null)
         {
             float horizontal = input.LeftStick.x;
             if (horizontal != 0)
@@ -390,6 +390,7 @@ public class NinjaController : MonoBehaviour
         Shield = ShieldType.None;
         phasePfx.Stop();
         phaseShieldPfx.Stop();
+        fatiguedPfx.Stop();
     }
 
     private void OnMatchFinished()
@@ -423,6 +424,15 @@ public class NinjaController : MonoBehaviour
                 break;
             default:
                 throw new ArgumentOutOfRangeException("type", type, null);
+        }
+    }
+
+    private void StopParticleSystem(ParticleSystem particleSys, bool destroyRemainingParticles)
+    {
+        particleSys.Stop();
+        if (destroyRemainingParticles)
+        {
+            particleSys.Clear();
         }
     }
 }
