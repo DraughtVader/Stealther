@@ -114,6 +114,9 @@ public class RopeController : MonoBehaviour
         {
             return;
         }
+        Destroy(gameObject);
+        return;
+
         var last = ropeNodes[ropeNodes.Count - 1];
         isAttached = false;
         attachedBody.AnchoredJoint2D.enabled = false;

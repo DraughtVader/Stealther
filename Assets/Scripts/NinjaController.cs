@@ -63,6 +63,12 @@ public class NinjaController : MonoBehaviour
         phaseShieldPfx,
         fatiguedPfx;
 
+    [SerializeField]
+    protected AudioClip rope,
+        throwing,
+        grunt,
+        fatigued;
+
     public string NinjaName
     {
         get { return Description.Name; }
@@ -87,6 +93,7 @@ public class NinjaController : MonoBehaviour
     private float shieldUpTime;
     private float throwStamina;
     private bool staminaDepleted;
+    private AudioSource audioSource;
 
     public NinjaState State{ get; set;}
     public NinjaDescription Description { get; set; }
@@ -143,7 +150,7 @@ public class NinjaController : MonoBehaviour
                 if (input.Jumped)
                 {
                     GameManager.Instance.AddPlayer(this);
-                    headSprite.color = NinjaColor;
+                    headSprite.color = aimingTransform.GetComponentInChildren<SpriteRenderer>().color = NinjaColor;
                     State = NinjaState.WaitingToPlay;
                 }
                 break;
@@ -234,12 +241,14 @@ public class NinjaController : MonoBehaviour
         var projectile = Instantiate(currentProjectile, (Vector2)transform.position + direction, Quaternion.identity);
         projectile.GetComponent<Rigidbody2D>().AddForce(direction * projectileSpeed, ForceMode2D.Impulse);
         projectile.GetComponent<NinjaStarController>().Thrower = this;
+        audioSource.PlayOneShot(throwing);
 
         throwStamina -= throwStaminaDrain;
         if (throwStamina <= 0)
         {
             staminaDepleted = true;
             fatiguedPfx.Play();
+            audioSource.PlayOneShot(fatigued);
         }
     }
 
@@ -256,6 +265,7 @@ public class NinjaController : MonoBehaviour
                 ropeController.AttachRope(rayHits.point, this);
                 anchoredJoint2D.enabled = true;
                 rigidbody.AddForce(direction.normalized);
+                audioSource.PlayOneShot(rope);
             }
         }
         else if (input.Jumped)
@@ -351,6 +361,7 @@ public class NinjaController : MonoBehaviour
             State = NinjaState.Stunned;
             unstunTime = DateTime.Now.AddSeconds(stunDuration);
             stunPfx.Play();
+            audioSource.PlayOneShot(grunt);
             Detach();
         }
     }
@@ -402,6 +413,7 @@ public class NinjaController : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody2D>();
         State = NinjaState.WaitingToJoin;
+        audioSource = GetComponent<AudioSource>();
 
         GameManager.Instance.RoundStart += OnRoundStart;
         GameManager.Instance.RoundEnd += OnRoundEnd;

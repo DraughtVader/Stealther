@@ -1,9 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Hazard : MonoBehaviour
 {
+    [SerializeField]
+    protected AudioClip sfxClip;
+
+    private AudioSource audioSource;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         OnCollision(other.gameObject);
@@ -23,9 +31,19 @@ public class Hazard : MonoBehaviour
         var ninja = other.GetComponent<NinjaController>();
         if (ninja != null && ninja.IsKillable)
         {
+            Vector2 position = ninja.transform.position;
             ninja.Killed();
-            GameManager.Instance.NinjaKilled(ninja, transform.position);
+            OnKilledNinja(ninja);
+            GameManager.Instance.NinjaKilled(ninja, position);
         }
 
+    }
+
+    protected virtual void OnKilledNinja(NinjaController ninja)
+    {
+        if (audioSource != null && sfxClip != null)
+        {
+            audioSource.PlayOneShot(sfxClip);
+        }
     }
 }

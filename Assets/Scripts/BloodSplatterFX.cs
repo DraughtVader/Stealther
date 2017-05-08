@@ -27,12 +27,22 @@ public class BloodSplatterFX : MonoBehaviour
         {
             foreach (var item in enter)
             {
-                var blood = Instantiate(bloodSplatter, transform.position + item.position,  Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
-                if (bloodSpatterParent == null)
+                Vector2 position = transform.position + item.position;
+                var blood = Instantiate(bloodSplatter, position,  Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
+                var hit = Physics2D.OverlapPoint(position);
+                if (hit != null && hit.GetComponent<Bloodable>() && hit.gameObject.layer != LayerMask.NameToLayer("Ropables")) //TODO sort out this logic
                 {
-                    bloodSpatterParent = new GameObject("BloodSpatterParent").transform;
+                    blood.transform.parent =(hit.transform);
                 }
-                blood.transform.parent = bloodSpatterParent;
+                else
+                {
+                    if (bloodSpatterParent == null)
+                    {
+                        bloodSpatterParent = new GameObject("BloodSpatterParent").transform;
+                    }
+                    blood.transform.parent = bloodSpatterParent;
+                }
+
             }
         }
     }
