@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using InControl;
 
 public class GameManager : MonoBehaviour
 {
@@ -30,9 +29,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     protected SlowMoController slowMoController;
 
+    [SerializeField]
+    protected AudioClip start,
+        end;
+
     protected Dictionary<NinjaController, int> competingNinjas = new Dictionary<NinjaController, int>();
     protected List<NinjaController> aliveNinjas;
     private NinjaDescription[] ninjaDescriptions;
+    private AudioSource audioSource;
 
     public State GameState { get; set; }
 
@@ -72,6 +76,7 @@ public class GameManager : MonoBehaviour
         {
             GameUiManager.Instance.DisplayFinalScores(competingNinjas);
             GameState = State.MatchScore;
+            audioSource.PlayOneShot(end);
         }
         else
         {
@@ -129,6 +134,8 @@ public class GameManager : MonoBehaviour
             RoundStart();
         }
         GameState = State.Playing;
+
+        audioSource.PlayOneShot(start);
     }
 
     public void GameComplete()
@@ -151,6 +158,7 @@ public class GameManager : MonoBehaviour
     protected virtual void Awake()
     {
         Instance = this;
+        audioSource = GetComponent<AudioSource>();
     }
 
     protected virtual void OnDestroy()

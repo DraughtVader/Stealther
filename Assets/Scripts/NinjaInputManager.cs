@@ -52,11 +52,5 @@ public class NinjaInputManager : MonoBehaviour
         get { return InputDevice != null ? InputDevice.RightStick.Vector : Vector2.zero ; }
     }
 
-    public InputDevice InputDevice
-    {
-        get
-        {
-            return (InputManager.Devices.Count > playerNum) ? InputManager.Devices[playerNum] : null;
-        }
-    }
+    public XInputDevice InputDevice { get; set; }
 }

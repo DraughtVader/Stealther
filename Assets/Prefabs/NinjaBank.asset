@@ -36,9 +36,6 @@ MonoBehaviour:
   - Name: Murasaki
     Color: {r: 0.6081517, g: 0.2509191, b: 0.875, a: 1}
     Icon: {fileID: 0}
-  - Name: Chairo
-    Color: {r: 0.6397059, g: 0.46284604, b: 0.19755623, a: 1}
-    Icon: {fileID: 0}
   - Name: Haiiro
     Color: {r: 0.46323532, g: 0.46323532, b: 0.46323532, a: 1}
     Icon: {fileID: 0}
