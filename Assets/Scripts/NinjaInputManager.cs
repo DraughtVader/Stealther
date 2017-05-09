@@ -1,10 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using InControl;
 
 public class NinjaInputManager : MonoBehaviour
 {
+    private bool isVibrating;
+    private DateTime stopVibration;
+
     [SerializeField]
     protected int playerNum;
     public int PlayerNum
@@ -53,4 +57,29 @@ public class NinjaInputManager : MonoBehaviour
     }
 
     public XInputDevice InputDevice { get; set; }
+
+    //TODO fix: currents turns off controllers
+    /*
+    public void Vibrate(float intensity, float duration = 0.5f)
+    {
+        return;
+        InputDevice.Vibrate(intensity);
+        isVibrating = true;
+        stopVibration = DateTime.Now.AddSeconds(duration);
+    }
+
+    private void Update()
+    {
+        if (isVibrating && DateTime.Now >= stopVibration)
+        {
+            StopVibration();
+        }
+    }
+
+    private void StopVibration()
+    {
+        isVibrating = false;
+        InputDevice.StopVibration();
+    }
+    */
 }
