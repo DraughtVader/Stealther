@@ -9,6 +9,9 @@ public class NinjaStarController : Hazard
     [SerializeField]
     protected Vector2 slowMoRange = new Vector2(0.1f, 0.5f);
 
+    [SerializeField]
+    protected GameObject collisionPfxPrefab;
+
     public NinjaController Thrower { get; set; }
 
 
@@ -54,6 +57,13 @@ public class NinjaStarController : Hazard
 
     protected virtual void PostCollision(GameObject other)
     {
+        var star = other.GetComponent<NinjaStarController>();
+        if (star != null && collisionPfxPrefab != null)
+        {
+            var position = new Vector3((other.transform.position.x + transform.position.x) * 0.5f, (other.transform.position.y + transform.position.y) * 0.5f);
+            Instantiate(collisionPfxPrefab, position, Quaternion.identity);
+        }
+
         var ninja = other.GetComponent<NinjaController>();
         if (ninja == null || ninja.DestroyProjectileOnHit)
         {

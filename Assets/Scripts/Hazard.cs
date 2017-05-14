@@ -36,7 +36,6 @@ public class Hazard : MonoBehaviour
             OnKilledNinja(ninja);
             GameManager.Instance.NinjaKilled(ninja, position);
         }
-
     }
 
     protected virtual void OnKilledNinja(NinjaController ninja)

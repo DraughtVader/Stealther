@@ -222,9 +222,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff93da91432c91248a985a719ecff66a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sfxClip: {fileID: 0}
   rotationSpeed: 10
   slowMoDistanceCheck: 2.5
   slowMoRange: {x: 0.01, y: 0.5}
+  collisionPfxPrefab: {fileID: 1725389007337470, guid: fe4522281d4bda243879cf9ae4cae720,
+    type: 2}
 --- !u!212 &212681680213450624
 SpriteRenderer:
   m_ObjectHideFlags: 1
