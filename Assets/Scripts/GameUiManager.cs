@@ -12,7 +12,8 @@ public class GameUiManager : MonoBehaviour
 
     [SerializeField]
     protected GameObject scoresPanel,
-                         startPanel;
+        startPanel,
+        title;
 
     [SerializeField]
     protected Text scoreText,
@@ -70,18 +71,16 @@ public class GameUiManager : MonoBehaviour
 
     public void AddPlayer(NinjaController ninja)
     {
-        playerImages[ninja.PlayerNumber].color = ninja.NinjaColor;
+        title.SetActive(false);
+        playerImages[ninja.PlayerNumber].color = new Color(0, 0, 0, 0);
         playerImages[ninja.PlayerNumber].GetComponentInChildren<Text>().text = ninja.NinjaName;
         playerCount++;
-        if (playerCount >= 2)
-        {
-            StartCountDown(GameManager.Instance.StartRound);
-        }
     }
 
     private void Reset()
     {
         startPanel.SetActive(true);
+        scoresPanel.SetActive(false);
         foreach (var item in playerImages)
         {
             item.color = new Color(1,1,1,0.25f);
@@ -145,5 +144,10 @@ public class GameUiManager : MonoBehaviour
             break;
         }
         return scoresSb.ToString();
+    }
+
+    public void StartGameCountDown()
+    {
+        StartCountDown(GameManager.Instance.StartRound);
     }
 }
