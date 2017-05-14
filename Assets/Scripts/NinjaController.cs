@@ -5,7 +5,7 @@ public class NinjaController : MonoBehaviour
 {
     public enum NinjaState
     {
-        NotPlaying, WaitingToJoin, WaitingToPlay, Alive, Dead, Stunned
+        NotPlaying, WaitingToJoin, WaitingToPlay, Alive, Dead, Stunned, Pregame
     }
 
     public enum AmmoType
@@ -85,6 +85,10 @@ public class NinjaController : MonoBehaviour
     private RopeController ropeController,
                            lastRopeController;
     private new Rigidbody2D rigidbody;
+    public Rigidbody2D Rigidbody
+    {
+        get { return rigidbody; }
+    }
     private float grabCooldown, lastVelocity;
     private RopeNode currentRopeNode;
     private DateTime unstunTime;
@@ -139,6 +143,7 @@ public class NinjaController : MonoBehaviour
         switch (State)
         {
             case NinjaState.Alive:
+            case NinjaState.Pregame:
                 Roping();
                 Attacking();
                 Aiming();
@@ -151,7 +156,7 @@ public class NinjaController : MonoBehaviour
                 {
                     GameManager.Instance.AddPlayer(this);
                     headSprite.color = aimingTransform.GetComponentInChildren<SpriteRenderer>().color = NinjaColor;
-                    State = NinjaState.WaitingToPlay;
+                    State = NinjaState.Pregame;
                 }
                 break;
             case NinjaState.WaitingToPlay:
@@ -258,17 +263,25 @@ public class NinjaController : MonoBehaviour
         {
             var direction = input.RightStick;
             var rayHits = Physics2D.Raycast(transform.position, direction, 10.0f, 1 << LayerMask.NameToLayer("Ropables"));
+            Detach();
+            ropeController = Instantiate(ropeControllerPrefab, transform.position, Quaternion.identity);
+            audioSource.PlayOneShot(rope);
             if (rayHits.transform != null)
             {
-                Detach();
-                ropeController = Instantiate(ropeControllerPrefab, transform.position, Quaternion.identity);
                 ropeController.AttachRope(rayHits.point, this);
                 anchoredJoint2D.enabled = true;
                 rigidbody.AddForce(direction.normalized);
-                audioSource.PlayOneShot(rope);
+            }
+            else
+            {
+                var point = (Vector2)transform.position + (direction.normalized * 10);
+                ropeController.AttachRope(point, this);
+                Destroy(ropeController.LastRopeNode.GetComponent<RopeNode>().gameObject);
+                ropeController = null;
+                AnchoredJoint2D.enabled = false;
             }
         }
-        else if (input.Jumped)
+        else if (input.RopeUp )
         {
             Detach();
         }

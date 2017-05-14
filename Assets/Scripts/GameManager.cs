@@ -18,7 +18,8 @@ public class GameManager : MonoBehaviour
     protected int targerWins = 5;
 
     [SerializeField]
-    protected GameObject splatterPfx;
+    protected GameObject splatterPfx,
+        gameLevel;
 
     [SerializeField]
     protected NinjaBank ninjaBank;
@@ -28,6 +29,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     protected SlowMoController slowMoController;
+
+    [SerializeField]
+    protected PregameManager pregameManger;
 
     [SerializeField]
     protected AudioClip start,
@@ -48,18 +52,7 @@ public class GameManager : MonoBehaviour
             AddScore(aliveNinjas[0]);
         }
 
-        var colliders = Physics2D.OverlapCircleAll(deathPosition, 2.0f);
-        int length = colliders.Length,
-                     count = 0;
-        var splatter = Instantiate(splatterPfx, deathPosition, Quaternion.identity);
-        var pfx = splatter.GetComponent<ParticleSystem>();
-        for (var i = 0; i < length; i++)
-        {
-            if (colliders[i].GetComponent<Bloodable>())
-            {
-                pfx.trigger.SetCollider(count++, colliders[i]);
-            }
-        }
+        Instantiate(splatterPfx, deathPosition, Quaternion.identity);
     }
 
     public void AddPlayer(NinjaController ninja)
@@ -67,6 +60,7 @@ public class GameManager : MonoBehaviour
         competingNinjas.Add(ninja, 0);
         ninja.Description = ninjaDescriptions[competingNinjas.Count - 1];
         GameUiManager.Instance.AddPlayer(ninja);
+        pregameManger.PlayerJoined(ninja);
     }
 
     public void AddScore(NinjaController ninja)
@@ -91,7 +85,7 @@ public class GameManager : MonoBehaviour
 
     public NinjaController GetClosestNinja(Vector3 position)
     {
-        if (aliveNinjas.Count <= 1)
+        if (aliveNinjas == null || aliveNinjas.Count <= 1)
         {
             return null;
         }
@@ -115,6 +109,9 @@ public class GameManager : MonoBehaviour
 
     public void StartRound()
     {
+        gameLevel.SetActive(true);
+        pregameManger.End();
+
         RopeController.DestroyAllRopes();
 
         var spawnPoints = spawnManager.SpawnPoints;
@@ -147,12 +144,20 @@ public class GameManager : MonoBehaviour
 
         RopeController.DestroyAllRopes();
 
+        foreach (var item in competingNinjas)
+        {
+            item.Key.transform.position = new Vector3(100, 100); //TODO tidy
+            item.Key.Rigidbody.isKinematic = true;
+            item.Key.Rigidbody.velocity = Vector2.zero;
+        }
+
         competingNinjas.Clear();
         ninjaDescriptions = ninjaBank.GetRandomNinjas(4);
 
         GameState = State.PlayerScreen;
         Destroy(BloodSplatterFX.bloodSpatterParent.gameObject);
         BloodSplatterFX.bloodSpatterParent = null;
+        gameLevel.SetActive(false);
     }
 
     protected virtual void Awake()

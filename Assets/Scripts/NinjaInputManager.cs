@@ -36,6 +36,11 @@ public class NinjaInputManager : MonoBehaviour
         get { return InputDevice != null && (!InputDevice.LeftTrigger.LastState && InputDevice.LeftTrigger.IsPressed); }
     }
 
+    public bool RopeUp
+    {
+        get { return InputDevice != null && (InputDevice.LeftTrigger.LastState && !InputDevice.LeftTrigger.IsPressed); }
+    }
+
     public bool IsAttacking
     {
         get { return InputDevice != null && InputDevice.RightTrigger.IsPressed; }

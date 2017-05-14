@@ -11,7 +11,6 @@ public class GameInputManager : MonoBehaviour
     private void Start()
     {
         InputManager.OnDeviceDetached += OnDeviceDetached;
-        InputManager.OnDeviceAttached += OnDeviceAttached; //not necessary
     }
 
     private void OnDeviceAttached(InputDevice inputDevice)

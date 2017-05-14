@@ -7,6 +7,11 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     protected Transform[] points;
 
+    public Transform[] Points
+    {
+        get { return points; }
+    }
+
     public Transform[] SpawnPoints
     {
         get

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BloodSplatterFX : MonoBehaviour
@@ -16,6 +17,16 @@ public class BloodSplatterFX : MonoBehaviour
     private void Start()
     {
         ps = GetComponent<ParticleSystem>();
+        var colliders = Physics2D.OverlapCircleAll(transform.position, 10.0f);
+        int length = colliders.Length,
+            count = 0;
+        for (var i = 0; i < length; i++)
+        {
+            if (colliders[i].GetComponent<Bloodable>())
+            {
+                ps.trigger.SetCollider(count++, colliders[i]);
+            }
+        }
     }
 
     private void OnParticleTrigger()
@@ -53,5 +64,13 @@ public class BloodSplatterFX : MonoBehaviour
                 blood.transform.parent = bloodSpatterParent;
             }
         }
+        var particles = new ParticleSystem.Particle[ps.particleCount];
+        ps.GetParticles(particles);
+        var list = particles.ToList();
+        foreach (var particle in enter)
+        {
+            list.Remove(particle);
+        }
+        ps.SetParticles(list.ToArray(), list.Count);
     }
 }
