@@ -75,10 +75,16 @@ public class NinjaController : MonoBehaviour
     }
 
     [SerializeField]
-    protected SpriteRenderer headSprite;
+    protected SpriteRenderer headSprite,
+        hatSprite;
     public Color NinjaColor
     {
         get { return Description.Color; }
+    }
+
+    public SpriteRenderer HatSprite
+    {
+        get { return hatSprite; }
     }
 
     private float verticalUp, verticalDown;
@@ -259,7 +265,7 @@ public class NinjaController : MonoBehaviour
 
     private void Roping()
     {
-        if (input.Roped)
+        if (input.Roped && input.RightStick.magnitude > 0.2f)
         {
             var direction = input.RightStick;
             var rayHits = Physics2D.Raycast(transform.position, direction, 10.0f, 1 << LayerMask.NameToLayer("Ropables"));
@@ -424,13 +430,17 @@ public class NinjaController : MonoBehaviour
 
     protected void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
         State = NinjaState.WaitingToJoin;
-        audioSource = GetComponent<AudioSource>();
 
         GameManager.Instance.RoundStart += OnRoundStart;
         GameManager.Instance.RoundEnd += OnRoundEnd;
         GameManager.Instance.MatchFinished += OnMatchFinished;
+    }
+
+    protected void Awake()
+    {
+        rigidbody = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void PickUp(PickUp.Type type)

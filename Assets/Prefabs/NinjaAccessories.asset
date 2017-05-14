@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97f4bcf1f96de3648a17bc7853bd9688, type: 3}
+  m_Name: NinjaAccessories
+  m_EditorClassIdentifier: 
+  ninjaAccessories:
+  - Sprite: {fileID: 21300000, guid: e44d2e8276a7a674bb3dc034e5f00661, type: 3}
+    Offset: {x: 0, y: 0}
+  - Sprite: {fileID: 21300002, guid: e44d2e8276a7a674bb3dc034e5f00661, type: 3}
+    Offset: {x: 0, y: 0}
+  - Sprite: {fileID: 21300004, guid: e44d2e8276a7a674bb3dc034e5f00661, type: 3}
+    Offset: {x: 0, y: 0}
+  - Sprite: {fileID: 21300006, guid: e44d2e8276a7a674bb3dc034e5f00661, type: 3}
+    Offset: {x: 0, y: 0}
+  - Sprite: {fileID: 21300008, guid: e44d2e8276a7a674bb3dc034e5f00661, type: 3}
+    Offset: {x: 0, y: 0}
+  - Sprite: {fileID: 21300010, guid: e44d2e8276a7a674bb3dc034e5f00661, type: 3}
+    Offset: {x: 0, y: 0}
+  - Sprite: {fileID: 21300012, guid: e44d2e8276a7a674bb3dc034e5f00661, type: 3}
+    Offset: {x: 0, y: 0}
+  - Sprite: {fileID: 21300014, guid: e44d2e8276a7a674bb3dc034e5f00661, type: 3}
+    Offset: {x: 0, y: 0}
+  - Sprite: {fileID: 21300016, guid: e44d2e8276a7a674bb3dc034e5f00661, type: 3}
+    Offset: {x: 0, y: 0}
+  - Sprite: {fileID: 21300018, guid: e44d2e8276a7a674bb3dc034e5f00661, type: 3}
+    Offset: {x: 0, y: 0}
+  - Sprite: {fileID: 21300020, guid: e44d2e8276a7a674bb3dc034e5f00661, type: 3}
+    Offset: {x: 0, y: 0}
+  - Sprite: {fileID: 21300022, guid: e44d2e8276a7a674bb3dc034e5f00661, type: 3}
+    Offset: {x: 0, y: 0}

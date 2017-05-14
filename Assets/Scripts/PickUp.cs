@@ -30,12 +30,15 @@ public class PickUp : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.RoundStart += OnRoundStart;
+        GameManager.Instance.MatchFinished += Destroy;
+
     }
 
     private void Destroy()
     {
         Destroy(gameObject);
         GameManager.Instance.RoundStart -= OnRoundStart;
+        GameManager.Instance.MatchFinished -= Destroy;
     }
 
 }

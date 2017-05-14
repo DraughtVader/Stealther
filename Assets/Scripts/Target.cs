@@ -23,7 +23,7 @@ public class Target : MonoBehaviour
 
     private void OnDestroyed()
     {
-        var splatter = Instantiate(splatterPfx, transform.position, Quaternion.identity);
+        Instantiate(splatterPfx, transform.position, Quaternion.identity);
         pregameManager.PlayerReady(ninja);
         gameObject.SetActive(false);
     }

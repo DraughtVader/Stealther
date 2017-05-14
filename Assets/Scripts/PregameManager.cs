@@ -43,6 +43,7 @@ public class PregameManager : MonoBehaviour
     public void PlayerReady(NinjaController ninja)
     {
         pregamers[ninja] = true;
+        GameUiManager.Instance.SetNinjaAsReady(ninja.PlayerNumber);
         if (pregamers.Count <= 1)
         {
             return;

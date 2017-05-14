@@ -73,4 +73,14 @@ public class BloodSplatterFX : MonoBehaviour
         }
         ps.SetParticles(list.ToArray(), list.Count);
     }
+
+    public static void DestroyAll()
+    {
+        if (bloodSpatterParent == null)
+        {
+            return;
+        }
+        Destroy(bloodSpatterParent.gameObject);
+        bloodSpatterParent = null;
+    }
 }

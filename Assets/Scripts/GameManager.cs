@@ -19,10 +19,14 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     protected GameObject splatterPfx,
-        gameLevel;
+        gameLevel,
+        accessoryDropPrefab;
 
     [SerializeField]
     protected NinjaBank ninjaBank;
+
+    [SerializeField]
+    protected NinjaAccessories ninjaAccessories;
 
     [SerializeField]
     protected SpawnManager spawnManager;
@@ -53,12 +57,15 @@ public class GameManager : MonoBehaviour
         }
 
         Instantiate(splatterPfx, deathPosition, Quaternion.identity);
+        var accessoryDrop = Instantiate(accessoryDropPrefab, deathPosition, Quaternion.identity);
+        accessoryDrop.GetComponent<AccessoryDrop>().SetUp(ninja.HatSprite.sprite);
     }
 
     public void AddPlayer(NinjaController ninja)
     {
         competingNinjas.Add(ninja, 0);
         ninja.Description = ninjaDescriptions[competingNinjas.Count - 1];
+        ninja.HatSprite.sprite = ninjaAccessories.GetRandomAccessory().Sprite;
         GameUiManager.Instance.AddPlayer(ninja);
         pregameManger.PlayerJoined(ninja);
     }
@@ -155,8 +162,7 @@ public class GameManager : MonoBehaviour
         ninjaDescriptions = ninjaBank.GetRandomNinjas(4);
 
         GameState = State.PlayerScreen;
-        Destroy(BloodSplatterFX.bloodSpatterParent.gameObject);
-        BloodSplatterFX.bloodSpatterParent = null;
+        BloodSplatterFX.DestroyAll();
         gameLevel.SetActive(false);
     }
 
@@ -174,5 +180,11 @@ public class GameManager : MonoBehaviour
     protected void Start()
     {
         ninjaDescriptions = ninjaBank.GetRandomNinjas(4);
+    }
+
+    public void StartFirstRound()
+    {
+        BloodSplatterFX.DestroyAll();
+        StartRound();
     }
 }

@@ -8,6 +8,34 @@ using UnityEngine.UI;
 
 public class GameUiManager : MonoBehaviour
 {
+    [Serializable]
+    public class PlayerUI
+    {
+        public Text NinjaName;
+
+        public GameObject JoinText,
+            readyIcon;
+
+        public void SetNinjaName(string name)
+        {
+            NinjaName.text = name;
+            NinjaName.gameObject.SetActive(true);
+            JoinText.SetActive(false);
+            readyIcon.SetActive(false);
+        }
+
+        public void SetAsReady()
+        {
+            readyIcon.SetActive(true);
+        }
+
+        public void SetJoinText()
+        {
+            NinjaName.gameObject.SetActive(false);
+            JoinText.SetActive(true);
+        }
+    }
+
     public static GameUiManager Instance;
 
     [SerializeField]
@@ -20,9 +48,8 @@ public class GameUiManager : MonoBehaviour
                    countdownText;
 
     [SerializeField]
-    protected Image[] playerImages;
+    protected PlayerUI[] playerUI;
 
-    private int playerCount;
     private float currentCountDown;
     private Action onCountDownComplete;
     private const string COLOUR_ID = " <color=#{0}>*</color> ";
@@ -72,21 +99,24 @@ public class GameUiManager : MonoBehaviour
     public void AddPlayer(NinjaController ninja)
     {
         title.SetActive(false);
-        playerImages[ninja.PlayerNumber].color = new Color(0, 0, 0, 0);
-        playerImages[ninja.PlayerNumber].GetComponentInChildren<Text>().text = ninja.NinjaName;
-        playerCount++;
+        playerUI[ninja.PlayerNumber].SetNinjaName(ninja.NinjaName);
+    }
+
+    public void SetNinjaAsReady(int index)
+    {
+        playerUI[index].SetAsReady();
     }
 
     private void Reset()
     {
         startPanel.SetActive(true);
         scoresPanel.SetActive(false);
-        foreach (var item in playerImages)
+        title.SetActive(true);
+        foreach (var item in playerUI)
         {
-            item.color = new Color(1,1,1,0.25f);
-            item.GetComponentInChildren<Text>().text = "PRESS A";
+            item.SetJoinText();
+
         }
-        playerCount = 0;
         GameManager.Instance.GameComplete();
     }
 
@@ -148,6 +178,6 @@ public class GameUiManager : MonoBehaviour
 
     public void StartGameCountDown()
     {
-        StartCountDown(GameManager.Instance.StartRound);
+        StartCountDown(GameManager.Instance.StartFirstRound);
     }
 }
