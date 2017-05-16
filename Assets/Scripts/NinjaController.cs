@@ -76,7 +76,8 @@ public class NinjaController : MonoBehaviour
 
     [SerializeField]
     protected SpriteRenderer headSprite,
-        hatSprite;
+        hatSprite,
+        bodySprite;
     public Color NinjaColor
     {
         get { return Description.Color; }
@@ -469,5 +470,22 @@ public class NinjaController : MonoBehaviour
         {
             particleSys.Clear();
         }
+    }
+
+    public void SetUpBody(AccessoryDescription body)
+    {
+        bodySprite.sprite = body.Sprite;
+        bodySprite.color = Description.Color;
+    }
+
+    public void InputAssigned()
+    {
+        if (State != NinjaState.WaitingToJoin)
+        {
+            return;
+        }
+        GameManager.Instance.AddPlayer(this);
+        headSprite.color = aimingTransform.GetComponentInChildren<SpriteRenderer>().color = NinjaColor;
+        State = NinjaState.Pregame;
     }
 }

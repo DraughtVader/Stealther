@@ -61,7 +61,13 @@ public class NinjaInputManager : MonoBehaviour
         get { return InputDevice != null ? InputDevice.RightStick.Vector : Vector2.zero ; }
     }
 
-    public XInputDevice InputDevice { get; set; }
+    public void AssignInput(XInputDevice device)
+    {
+        InputDevice = device;
+        GetComponent<NinjaController>().InputAssigned();
+    }
+
+    public XInputDevice InputDevice { get; private set; }
 
     //TODO fix: currents turns off controllers
     /*

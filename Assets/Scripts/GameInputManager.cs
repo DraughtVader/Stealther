@@ -40,7 +40,7 @@ public class GameInputManager : MonoBehaviour
     private void AssignDevice(InputDevice inputDevice)
     {
         var xinput = inputDevice as XInputDevice;
-        players[xinput.DeviceIndex].InputDevice = xinput;
+        players[xinput.DeviceIndex].AssignInput(xinput);
     }
 
     private bool JoinButtonWasPressedOnDevice( InputDevice inputDevice )
@@ -57,11 +57,6 @@ public class GameInputManager : MonoBehaviour
     private void OnDeviceDetached( InputDevice inputDevice )
     {
         var xinput = inputDevice as XInputDevice;
-        players[xinput.DeviceIndex].InputDevice = null;
-    }
-
-    private void RemovePlayer( NinjaInputManager player )
-    {
-        player.InputDevice = null;
+        players[xinput.DeviceIndex].AssignInput(null);
     }
 }

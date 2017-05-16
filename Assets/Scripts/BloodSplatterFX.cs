@@ -10,6 +10,10 @@ public class BloodSplatterFX : MonoBehaviour
     [SerializeField]
     protected GameObject bloodSplatter;
 
+    [SerializeField]
+    protected Vector2 boxSize,
+        boxOffset;
+
     private List<ParticleSystem.Particle> enter = new List<ParticleSystem.Particle>();
 
     public static Transform bloodSpatterParent;
@@ -17,14 +21,16 @@ public class BloodSplatterFX : MonoBehaviour
     private void Start()
     {
         ps = GetComponent<ParticleSystem>();
-        var colliders = Physics2D.OverlapCircleAll(transform.position, 10.0f);
+        var colliders = Physics2D.OverlapBoxAll((Vector2)transform.position + boxOffset, boxSize, 0.0f);
         int length = colliders.Length,
             count = 0;
+
+        var closest = colliders.OrderBy(x => Vector2.Distance(transform.position, x.transform.position)).ToList();
         for (var i = 0; i < length; i++)
         {
-            if (colliders[i].GetComponent<Bloodable>())
+            if (closest[i].GetComponent<Bloodable>())
             {
-                ps.trigger.SetCollider(count++, colliders[i]);
+                ps.trigger.SetCollider(count++, closest[i]);
             }
         }
     }
@@ -40,7 +46,6 @@ public class BloodSplatterFX : MonoBehaviour
         foreach (var item in enter)
         {
             Vector2 position = transform.position + item.position;
-            var blood = Instantiate(bloodSplatter, position,  Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
             var hit = Physics2D.OverlapPoint(position);
             if (hit == null)
             {
@@ -51,6 +56,9 @@ public class BloodSplatterFX : MonoBehaviour
             {
                 return;
             }
+            var blood = Instantiate(bloodSplatter, position,  Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
+            blood.GetComponent<SpriteRenderer>().sortingOrder =
+                bloodable.GetComponent<SpriteRenderer>().sortingOrder + 1;
             if (bloodable.SetParent)
             {
                 blood.transform.parent = (hit.transform);
@@ -82,5 +90,10 @@ public class BloodSplatterFX : MonoBehaviour
         }
         Destroy(bloodSpatterParent.gameObject);
         bloodSpatterParent = null;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireCube(transform.position + (Vector3)boxOffset, boxSize);
     }
 }

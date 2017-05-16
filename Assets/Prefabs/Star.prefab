@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114852846780203236}
   - component: {fileID: 50826488158482556}
   - component: {fileID: 58543190768798162}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Star
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4042855752106852}
   - component: {fileID: 96174363192083926}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}

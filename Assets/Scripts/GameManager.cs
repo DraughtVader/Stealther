@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,17 +20,14 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     protected GameObject splatterPfx,
-        gameLevel,
         accessoryDropPrefab;
 
     [SerializeField]
     protected NinjaBank ninjaBank;
 
     [SerializeField]
-    protected NinjaAccessories ninjaAccessories;
-
-    [SerializeField]
-    protected SpawnManager spawnManager;
+    protected NinjaAccessories ninjaAccessories,
+        ninjaBodyBank;
 
     [SerializeField]
     protected SlowMoController slowMoController;
@@ -44,9 +42,13 @@ public class GameManager : MonoBehaviour
     protected Dictionary<NinjaController, int> competingNinjas = new Dictionary<NinjaController, int>();
     protected List<NinjaController> aliveNinjas;
     private NinjaDescription[] ninjaDescriptions;
+    private AccessoryDescription[] ninjaBodies;
     private AudioSource audioSource;
+    private Level currentLevel;
 
     public State GameState { get; set; }
+
+    public Level[] levels;
 
     public void NinjaKilled(NinjaController ninja, Vector3 deathPosition)
     {
@@ -66,6 +68,7 @@ public class GameManager : MonoBehaviour
         competingNinjas.Add(ninja, 0);
         ninja.Description = ninjaDescriptions[competingNinjas.Count - 1];
         ninja.HatSprite.sprite = ninjaAccessories.GetRandomAccessory().Sprite;
+        ninja.SetUpBody(ninjaBodies[competingNinjas.Count - 1]);
         GameUiManager.Instance.AddPlayer(ninja);
         pregameManger.PlayerJoined(ninja);
     }
@@ -116,12 +119,16 @@ public class GameManager : MonoBehaviour
 
     public void StartRound()
     {
-        gameLevel.SetActive(true);
+        foreach (var level in levels)
+        {
+            level.gameObject.SetActive(false);
+        }
+        currentLevel.gameObject.SetActive(true);
         pregameManger.End();
 
         RopeController.DestroyAllRopes();
 
-        var spawnPoints = spawnManager.SpawnPoints;
+        var spawnPoints = currentLevel.SpawnManager.SpawnPoints;
         GameUiManager.Instance.HideAll();
         aliveNinjas = competingNinjas.Keys.ToList();
         var length = aliveNinjas.Count;
@@ -160,10 +167,11 @@ public class GameManager : MonoBehaviour
 
         competingNinjas.Clear();
         ninjaDescriptions = ninjaBank.GetRandomNinjas(4);
+        ninjaBodies = ninjaBodyBank.GetRandomAccessories(4);
 
         GameState = State.PlayerScreen;
         BloodSplatterFX.DestroyAll();
-        gameLevel.SetActive(false);
+        currentLevel.gameObject.SetActive(false);
     }
 
     protected virtual void Awake()
@@ -180,11 +188,30 @@ public class GameManager : MonoBehaviour
     protected void Start()
     {
         ninjaDescriptions = ninjaBank.GetRandomNinjas(4);
+        ninjaBodies = ninjaBodyBank.GetRandomAccessories(4);
     }
 
     public void StartFirstRound()
     {
+        currentLevel = PickLevel();
         BloodSplatterFX.DestroyAll();
         StartRound();
+    }
+
+    private Level PickLevel()
+    {
+        if (Input.GetKey(KeyCode.Q))
+        {
+            return levels[0];
+        }
+        if (Input.GetKey(KeyCode.W))
+        {
+            return levels[1];
+        }
+        if (Input.GetKey(KeyCode.E))
+        {
+            return levels[2];
+        }
+        return levels[Random.Range(0, levels.Length)];
     }
 }

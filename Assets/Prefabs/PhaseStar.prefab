@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4374368475110978}
   - component: {fileID: 198954958859744822}
   - component: {fileID: 199523467484510314}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: PFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 114533108616226052}
   - component: {fileID: 50585865481518292}
   - component: {fileID: 58435011301467844}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: PhaseStar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,9 +119,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 331791e9f61786a498f64ea97a667a7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sfxClip: {fileID: 0}
   rotationSpeed: 10
   slowMoDistanceCheck: 2.5
   slowMoRange: {x: 0.01, y: 0.5}
+  collisionPfxPrefab: {fileID: 0}
 --- !u!198 &198954958859744822
 ParticleSystem:
   m_ObjectHideFlags: 1

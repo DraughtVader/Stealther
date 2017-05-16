@@ -1,26 +1,40 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NinjaAccessories", menuName = "NinjaData/NinjaAccessories")]
-public class NinjaAccessories : ScriptableObject
+[CreateAssetMenu(fileName = "NinjaBank", menuName = "NinjaData/NinjaBank")]
+public class NinjaBank : ScriptableObject
 {
     [SerializeField]
-    protected AccessoryDescription[] ninjaAccessories;
+    protected NinjaDescription[] ninjaDescriptions;
 
     public int Count
     {
-        get { return ninjaAccessories.Length; }
+        get { return ninjaDescriptions.Length; }
     }
 
-    public AccessoryDescription GetRandomAccessory()
+    public NinjaDescription[] GetRandomNinjas(int count)
     {
-        return ninjaAccessories[Random.Range(0, Count)];
+        var randoms = new List<int>();
+        for (var i = 0; i < Count; i++)
+        {
+            randoms.Add(i);
+        }
+        randoms.ShuffleInPlace();
+
+        var ninjas = new NinjaDescription[count];
+        for (var i = 0; i < count; i++)
+        {
+            ninjas[i] = ninjaDescriptions[randoms[i]];
+        }
+
+        return ninjas;
     }
 }
 
 [System.Serializable]
-public class AccessoryDescription
+public class NinjaDescription
 {
-    public Sprite Sprite;
-    public Vector2 Offset;
+    public string Name;
+    public Color Color;
+    public Sprite Icon;
 }

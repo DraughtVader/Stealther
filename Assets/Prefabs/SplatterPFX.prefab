@@ -168,6 +168,8 @@ MonoBehaviour:
   ps: {fileID: 198800153928445370}
   bloodSplatter: {fileID: 1635319380462840, guid: 7e62246b26f89a646a4510a582735f7c,
     type: 2}
+  boxSize: {x: 3, y: 12}
+  boxOffset: {x: 0, y: -5.63}
 --- !u!114 &114642496500450952
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -247,12 +249,12 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -398392564
+  randomSeed: -770404521
   InitialModule:
     serializedVersion: 3
     enabled: 1
     startLifetime:
-      scalar: 10
+      scalar: 2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -279,7 +281,7 @@ ParticleSystem:
         m_RotationOrder: 0
       minMaxState: 3
     startSpeed:
-      scalar: 3
+      scalar: 1.5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -297,7 +299,7 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 2
           time: 0
-          value: 0.6666667
+          value: 0.06666667
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -396,7 +398,7 @@ ParticleSystem:
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.05882353, b: 0.05882353, a: 1}
+      maxColor: {r: 1, g: 1, b: 1, a: 1}
       minMaxState: 0
     startSize:
       scalar: 0.25
@@ -601,7 +603,7 @@ ParticleSystem:
     size3D: 0
     rotation3D: 0
     gravityModifier:
-      scalar: 0.7
+      scalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -877,7 +879,7 @@ ParticleSystem:
       minMaxState: 1
     separateAxes: 0
   RotationModule:
-    enabled: 1
+    enabled: 0
     x:
       scalar: 0
       maxCurve:
@@ -2783,7 +2785,7 @@ ParticleSystemRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: bd9127985408a50459904d296d72e0e6, type: 2}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0

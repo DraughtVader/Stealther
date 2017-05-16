@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e7206a69b252bb409ef340b5cd125fd, type: 3}
+  m_Name: NinjaBodies
+  m_EditorClassIdentifier: 
+  ninjaAccessories:
+  - Sprite: {fileID: 21300000, guid: 1aebb4965fcd6b34db26a8301dcbb2af, type: 3}
+    Offset: {x: 0, y: 0}
+  - Sprite: {fileID: 21300000, guid: b5be23121a9aa2f409018cc82280b8da, type: 3}
+    Offset: {x: 0, y: 0}
+  - Sprite: {fileID: 21300000, guid: 8ac0bd3839f7d2d4fabc63434764863a, type: 3}
+    Offset: {x: 0, y: 0}
+  - Sprite: {fileID: 21300000, guid: f43ddff33245b384c802a589503d9134, type: 3}
+    Offset: {x: 0, y: 0}
