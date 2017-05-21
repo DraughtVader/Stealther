@@ -5,7 +5,7 @@ public class NinjaController : MonoBehaviour
 {
     public enum NinjaState
     {
-        NotPlaying, WaitingToJoin, WaitingToPlay, Alive, Dead, Stunned, Pregame
+        NotPlaying, WaitingToJoin, WaitingToPlay, Alive, Dead, Stunned, Pregame, Ready
     }
 
     public enum AmmoType
@@ -150,11 +150,13 @@ public class NinjaController : MonoBehaviour
         switch (State)
         {
             case NinjaState.Alive:
+            case NinjaState.Ready:
             case NinjaState.Pregame:
                 Roping();
                 Attacking();
                 Aiming();
                 Shielding();
+                Customisation();
                 break;
             case NinjaState.Dead:
                 break;
@@ -162,7 +164,7 @@ public class NinjaController : MonoBehaviour
                 if (input.Jumped)
                 {
                     GameManager.Instance.AddPlayer(this);
-                    headSprite.color = aimingTransform.GetComponentInChildren<SpriteRenderer>().color = NinjaColor;
+                    SetUpColour();
                     State = NinjaState.Pregame;
                 }
                 break;
@@ -175,6 +177,23 @@ public class NinjaController : MonoBehaviour
                     stunPfx.Stop();
                 }
                 break;
+        }
+    }
+
+    private void Customisation()
+    {
+        if (State == NinjaState.Pregame)
+        {
+            if (input.PressedRight)
+            {
+                GameManager.Instance.GetNextDescription(this);
+                SetUpColour();
+            }
+            else if (input.PressedLeft)
+            {
+                GameManager.Instance.GetPreviousDescription(this);
+                SetUpColour();
+            }
         }
     }
 
@@ -475,7 +494,12 @@ public class NinjaController : MonoBehaviour
     public void SetUpBody(AccessoryDescription body)
     {
         bodySprite.sprite = body.Sprite;
-        bodySprite.color = Description.Color;
+        bodySprite.color = NinjaColor;
+    }
+
+    public void SetUpColour()
+    {
+        headSprite.color = aimingTransform.GetComponentInChildren<SpriteRenderer>().color = bodySprite.color = NinjaColor;
     }
 
     public void InputAssigned()

@@ -13,8 +13,7 @@ public class TitleScreenManager : MonoBehaviour
 
 	public void GoToPractise()
 	{
-		//TODO
-		//SceneManager.LoadScene("SinglePlayer");
+		SceneManager.LoadScene("SinglePlayer");
 	}
 
 	private void Update()
@@ -24,11 +23,11 @@ public class TitleScreenManager : MonoBehaviour
 		{
 			return;
 		}
-		if (inputDevice.Action1)
+		if (inputDevice.Action3)
 		{
-			//TODO
+			GoToPractise();
 		}
-		else if (inputDevice.Action2)
+		else if (inputDevice.Action1)
 		{
 			GoToMultiplayer();
 		}

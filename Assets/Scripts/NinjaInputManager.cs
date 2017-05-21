@@ -61,6 +61,16 @@ public class NinjaInputManager : MonoBehaviour
         get { return InputDevice != null ? InputDevice.RightStick.Vector : Vector2.zero ; }
     }
 
+    public bool PressedRight
+    {
+        get {  return InputDevice != null && (!InputDevice.DPadRight.LastState && InputDevice.DPadRight.IsPressed);}
+    }
+
+    public bool PressedLeft
+    {
+        get {  return InputDevice != null && (!InputDevice.DPadLeft.LastState && InputDevice.DPadLeft.IsPressed);}
+    }
+
     public void AssignInput(XInputDevice device)
     {
         InputDevice = device;

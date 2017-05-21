@@ -21,12 +21,18 @@ public class RopeNode : MonoBehaviour
 
     public RopeController RopeController { get; set; }
 
-    public void CutRope()
+    public void CutRope(Hazard cutter)
     {
         if (RopeController == null)
         {
             return;
         }
+        var star = cutter as NinjaStarController;
+        if (star != null && star.Thrower == RopeController.AttachedNinja)
+        {
+            return;
+        }
+
         RopeController.CutRope(this);
         Destroy();
     }

@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 114533108616226052}
   - component: {fileID: 50585865481518292}
   - component: {fileID: 58435011301467844}
+  - component: {fileID: 114794715710200820}
   m_Layer: 12
   m_Name: PhaseStar
   m_TagString: Untagged
@@ -124,6 +125,18 @@ MonoBehaviour:
   slowMoDistanceCheck: 2.5
   slowMoRange: {x: 0.01, y: 0.5}
   collisionPfxPrefab: {fileID: 0}
+--- !u!114 &114794715710200820
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1599028574634322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3aefb8195816710469348cee8aeb8de9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeTime: 10
 --- !u!198 &198954958859744822
 ParticleSystem:
   m_ObjectHideFlags: 1

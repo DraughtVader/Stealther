@@ -26,7 +26,7 @@ public class Hazard : MonoBehaviour
         var ropeNode = other.GetComponent<RopeNode>();
         if (ropeNode)
         {
-            ropeNode.CutRope();
+            ropeNode.CutRope(this);
         }
         var ninja = other.GetComponent<NinjaController>();
         if (ninja != null && ninja.IsKillable)

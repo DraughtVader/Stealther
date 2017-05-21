@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameUiManager : MonoBehaviour
@@ -14,19 +15,28 @@ public class GameUiManager : MonoBehaviour
         public Text NinjaName;
 
         public GameObject JoinText,
-            readyIcon;
+            readyIcon,
+            leftArrow,
+            rightArrow;
 
-        public void SetNinjaName(string name)
+        public void SetNinjaName(string name, bool unready = true)
         {
             NinjaName.text = name;
             NinjaName.gameObject.SetActive(true);
             JoinText.SetActive(false);
-            readyIcon.SetActive(false);
+            if (unready)
+            {
+                readyIcon.SetActive(false);
+                rightArrow.SetActive(true);
+                leftArrow.SetActive(true);
+            }
         }
 
         public void SetAsReady()
         {
             readyIcon.SetActive(true);
+            rightArrow.SetActive(false);
+            leftArrow.SetActive(false);
         }
 
         public void SetJoinText()
@@ -41,11 +51,12 @@ public class GameUiManager : MonoBehaviour
     [SerializeField]
     protected GameObject scoresPanel,
         startPanel,
-        title;
+        title,
+        levelTextPanel;
 
     [SerializeField]
     protected Text scoreText,
-                   countdownText;
+        countdownText;
 
     [SerializeField]
     protected PlayerUI[] playerUI;
@@ -99,7 +110,13 @@ public class GameUiManager : MonoBehaviour
     public void AddPlayer(NinjaController ninja)
     {
         title.SetActive(false);
+        levelTextPanel.SetActive(true);
         playerUI[ninja.PlayerNumber].SetNinjaName(ninja.NinjaName);
+    }
+
+    public void UpdatePlayer(NinjaController ninja)
+    {
+        playerUI[ninja.PlayerNumber].SetNinjaName(ninja.NinjaName, false);
     }
 
     public void SetNinjaAsReady(int index)
@@ -112,6 +129,7 @@ public class GameUiManager : MonoBehaviour
         startPanel.SetActive(true);
         scoresPanel.SetActive(false);
         title.SetActive(true);
+        levelTextPanel.SetActive(false);
         foreach (var item in playerUI)
         {
             item.SetJoinText();
@@ -179,5 +197,16 @@ public class GameUiManager : MonoBehaviour
     public void StartGameCountDown()
     {
         StartCountDown(GameManager.Instance.StartFirstRound);
+    }
+
+    public void UpdateLevel(Level level)
+    {
+        levelTextPanel.GetComponentInChildren<Text>().text = level.Title;
+    }
+
+    public void BackToTitle()
+    {
+        //TODO
+       // SceneManager.LoadScene("TitleScreen");
     }
 }

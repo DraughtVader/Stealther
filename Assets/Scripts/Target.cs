@@ -5,7 +5,7 @@ using UnityEngine;
 public class Target : MonoBehaviour
 {
     [SerializeField]
-    protected GameObject splatterPfx;
+    protected BloodSplatterFX splatterPfx;
 
     [SerializeField]
     protected PregameManager pregameManager;
@@ -23,7 +23,8 @@ public class Target : MonoBehaviour
 
     private void OnDestroyed()
     {
-        Instantiate(splatterPfx, transform.position, Quaternion.identity);
+        var spaltter = Instantiate(splatterPfx, transform.position, Quaternion.identity);
+        spaltter.SetUp(ninja.NinjaColor);
         pregameManager.PlayerReady(ninja);
         gameObject.SetActive(false);
     }

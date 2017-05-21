@@ -16,6 +16,11 @@ public class RopeController : MonoBehaviour
     private bool isAttached;
     private NinjaController attachedBody;
 
+    public NinjaController AttachedNinja
+    {
+        get { return attachedBody; }
+    }
+
     public bool IsAttached
     {
         get {return isAttached; }
@@ -95,7 +100,10 @@ public class RopeController : MonoBehaviour
         if (ropeNodes.Count <= minRopeNodes || index > ropeNodes.Count - minRopeNodes) //remaining rope is too short, end it
         {
             var last = ropeNodes[ropeNodes.Count - 1];
-            last.AnchoredJoint2D.enabled = false;
+            if (last != null)
+            {
+                last.AnchoredJoint2D.enabled = false;
+            }
         }
         else
         {
@@ -114,6 +122,7 @@ public class RopeController : MonoBehaviour
         {
             return;
         }
+        ropeNodes.Clear();
         Destroy(gameObject);
         /*
         var last = ropeNodes[ropeNodes.Count - 1];

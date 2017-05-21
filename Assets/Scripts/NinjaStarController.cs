@@ -64,11 +64,18 @@ public class NinjaStarController : Hazard
             Instantiate(collisionPfxPrefab, position, Quaternion.identity);
         }
 
+        var ropeNode = other.GetComponent<RopeNode>();
+        if (ropeNode != null)
+        {
+            return;
+        }
+
         var ninja = other.GetComponent<NinjaController>();
         if (ninja == null || ninja.DestroyProjectileOnHit)
         {
             Destroy(gameObject);
         }
+
     }
 
     private void OnDestroy()

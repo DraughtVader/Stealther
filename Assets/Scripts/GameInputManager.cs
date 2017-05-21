@@ -27,6 +27,20 @@ public class GameInputManager : MonoBehaviour
 
         var inputDevice = InputManager.ActiveDevice;
 
+        if (UpButtonWasPressedOnDevice(inputDevice))
+        {
+            GameManager.Instance.UpButtonPress();
+        }
+        else if (DownButtonWasPressedOnDevice(inputDevice))
+        {
+            GameManager.Instance.DownButtonPress();
+        }
+
+        if (BButtonWasPressedOnDevice(inputDevice))
+        {
+            GameUiManager.Instance.BackToTitle();
+        }
+
         if (!JoinButtonWasPressedOnDevice(inputDevice))
         {
             return;
@@ -46,6 +60,21 @@ public class GameInputManager : MonoBehaviour
     private bool JoinButtonWasPressedOnDevice( InputDevice inputDevice )
     {
         return inputDevice.Action1.WasPressed;
+    }
+
+    private bool UpButtonWasPressedOnDevice( InputDevice inputDevice )
+    {
+        return inputDevice.DPadUp.WasPressed;
+    }
+
+    private bool DownButtonWasPressedOnDevice( InputDevice inputDevice )
+    {
+        return inputDevice.DPadDown.WasPressed;
+    }
+
+    private bool BButtonWasPressedOnDevice( InputDevice inputDevice )
+    {
+        return inputDevice.Action2.WasPressed;
     }
 
     private bool ThereIsNoPlayerUsingDevice( InputDevice inputDevice )

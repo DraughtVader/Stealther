@@ -23,14 +23,10 @@ public class GameManager : MonoBehaviour
         accessoryDropPrefab;
 
     [SerializeField]
-    protected NinjaBank ninjaBank;
-
-    [SerializeField]
-    protected NinjaAccessories ninjaAccessories,
-        ninjaBodyBank;
-
-    [SerializeField]
     protected SlowMoController slowMoController;
+
+    [SerializeField]
+    protected NinjaPickerManager ninjaPicker;
 
     [SerializeField]
     protected PregameManager pregameManger;
@@ -41,7 +37,6 @@ public class GameManager : MonoBehaviour
 
     protected Dictionary<NinjaController, int> competingNinjas = new Dictionary<NinjaController, int>();
     protected List<NinjaController> aliveNinjas;
-    private NinjaDescription[] ninjaDescriptions;
     private AccessoryDescription[] ninjaBodies;
     private AudioSource audioSource;
     private Level currentLevel;
@@ -49,6 +44,22 @@ public class GameManager : MonoBehaviour
     public State GameState { get; set; }
 
     public Level[] levels;
+
+    public void UpButtonPress()
+    {
+        if (GameState == State.PlayerScreen && competingNinjas.Count > 0)
+        {
+            PreviousLevel();
+        }
+    }
+
+    public void DownButtonPress()
+    {
+        if (GameState == State.PlayerScreen && competingNinjas.Count > 0)
+        {
+            NextLevel();
+        }
+    }
 
     public void NinjaKilled(NinjaController ninja, Vector3 deathPosition)
     {
@@ -58,19 +69,36 @@ public class GameManager : MonoBehaviour
             AddScore(aliveNinjas[0]);
         }
 
-        Instantiate(splatterPfx, deathPosition, Quaternion.identity);
+        var blood = Instantiate(splatterPfx, deathPosition, Quaternion.identity);
+        blood.GetComponent<BloodSplatterFX>().SetUp(ninja.NinjaColor);
         var accessoryDrop = Instantiate(accessoryDropPrefab, deathPosition, Quaternion.identity);
         accessoryDrop.GetComponent<AccessoryDrop>().SetUp(ninja.HatSprite.sprite);
+    }
+
+    public void GetNextDescription(NinjaController ninja)
+    {
+        ninja.Description = ninjaPicker.GetNextDescription(ninja.Description);
+        GameUiManager.Instance.UpdatePlayer(ninja);
+    }
+
+    public void GetPreviousDescription(NinjaController ninja)
+    {
+        ninja.Description = ninjaPicker.GetLastDescription(ninja.Description);
+        GameUiManager.Instance.UpdatePlayer(ninja);
     }
 
     public void AddPlayer(NinjaController ninja)
     {
         competingNinjas.Add(ninja, 0);
-        ninja.Description = ninjaDescriptions[competingNinjas.Count - 1];
-        ninja.HatSprite.sprite = ninjaAccessories.GetRandomAccessory().Sprite;
+        ninja.Description = ninjaPicker.GetDescription();
+        ninja.HatSprite.sprite = ninjaPicker.GetNextHat().Sprite;
         ninja.SetUpBody(ninjaBodies[competingNinjas.Count - 1]);
         GameUiManager.Instance.AddPlayer(ninja);
         pregameManger.PlayerJoined(ninja);
+        if (competingNinjas.Count == 1)
+        {
+            PickLevel();
+        }
     }
 
     public void AddScore(NinjaController ninja)
@@ -166,8 +194,7 @@ public class GameManager : MonoBehaviour
         }
 
         competingNinjas.Clear();
-        ninjaDescriptions = ninjaBank.GetRandomNinjas(4);
-        ninjaBodies = ninjaBodyBank.GetRandomAccessories(4);
+        ninjaBodies = ninjaPicker.GetBodies(4);
 
         GameState = State.PlayerScreen;
         BloodSplatterFX.DestroyAll();
@@ -187,31 +214,32 @@ public class GameManager : MonoBehaviour
 
     protected void Start()
     {
-        ninjaDescriptions = ninjaBank.GetRandomNinjas(4);
-        ninjaBodies = ninjaBodyBank.GetRandomAccessories(4);
+        ninjaBodies = ninjaPicker.GetBodies(4);
     }
 
     public void StartFirstRound()
     {
-        currentLevel = PickLevel();
         BloodSplatterFX.DestroyAll();
         StartRound();
     }
 
-    private Level PickLevel()
+    private void PickLevel()
     {
-        if (Input.GetKey(KeyCode.Q))
-        {
-            return levels[0];
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            return levels[1];
-        }
-        if (Input.GetKey(KeyCode.E))
-        {
-            return levels[2];
-        }
-        return levels[Random.Range(0, levels.Length)];
+        currentLevel = levels[Random.Range(0, levels.Length)];
+        GameUiManager.Instance.UpdateLevel(currentLevel);
+    }
+
+    private void NextLevel()
+    {
+        var index = Array.IndexOf(levels, currentLevel);
+        currentLevel = levels[(index + 1) % levels.Length];
+        GameUiManager.Instance.UpdateLevel(currentLevel);
+    }
+
+    private void PreviousLevel()
+    {
+        var index = Array.IndexOf(levels, currentLevel);
+        currentLevel = index == 0  ? levels[levels.Length-1] : levels[index - 1];
+        GameUiManager.Instance.UpdateLevel(currentLevel);
     }
 }

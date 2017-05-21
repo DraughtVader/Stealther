@@ -284,10 +284,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afd10d7633a57804ea2f59aaa7f30165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  splatterPfx: {fileID: 1008625961292662, guid: 1ddc70638d804b943ad65414373a2678,
+  splatterPfx: {fileID: 114391528205754610, guid: 1ddc70638d804b943ad65414373a2678,
     type: 2}
   pregameManager: {fileID: 0}
   ninja: {fileID: 0}
+  bloodColour: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!114 &114278253296388148
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -15,8 +15,10 @@ public class BloodSplatterFX : MonoBehaviour
         boxOffset;
 
     private List<ParticleSystem.Particle> enter = new List<ParticleSystem.Particle>();
+    private Color currentColor = Color.white;
 
     public static Transform bloodSpatterParent;
+    private static List<GameObject> parentedBlood;
 
     private void Start()
     {
@@ -33,6 +35,14 @@ public class BloodSplatterFX : MonoBehaviour
                 ps.trigger.SetCollider(count++, closest[i]);
             }
         }
+    }
+
+    public void SetUp(Color color)
+    {
+        currentColor = color;
+        var settings = ps.main;
+        settings.startColor = currentColor;
+        ps.Play();
     }
 
     private void OnParticleTrigger()
@@ -59,9 +69,15 @@ public class BloodSplatterFX : MonoBehaviour
             var blood = Instantiate(bloodSplatter, position,  Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
             blood.GetComponent<SpriteRenderer>().sortingOrder =
                 bloodable.GetComponent<SpriteRenderer>().sortingOrder + 1;
+            blood.GetComponent<SpriteRenderer>().color = currentColor;
             if (bloodable.SetParent)
             {
                 blood.transform.parent = (hit.transform);
+                if (parentedBlood == null)
+                {
+                    parentedBlood = new List<GameObject>();
+                }
+                parentedBlood.Add(blood);
             }
             else
             {
@@ -84,12 +100,22 @@ public class BloodSplatterFX : MonoBehaviour
 
     public static void DestroyAll()
     {
-        if (bloodSpatterParent == null)
+        if (bloodSpatterParent != null)
         {
-            return;
+            Destroy(bloodSpatterParent.gameObject);
+            bloodSpatterParent = null;
         }
-        Destroy(bloodSpatterParent.gameObject);
-        bloodSpatterParent = null;
+        if (parentedBlood != null)
+        {
+            foreach (var blood in parentedBlood)
+            {
+                if (blood != null)
+                {
+                    Destroy(blood);
+                }
+            }
+            parentedBlood.Clear();
+        }
     }
 
     private void OnDrawGizmosSelected()

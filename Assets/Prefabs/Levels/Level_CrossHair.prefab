@@ -71,7 +71,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4853148314861126}
-  - component: {fileID: 114215721231813880}
   - component: {fileID: 114256254410086106}
   m_Layer: 0
   m_Name: Level_CrossHair
@@ -1490,17 +1489,6 @@ MonoBehaviour:
   - {fileID: 4934572902982646}
   - {fileID: 4653546882020108}
   - {fileID: 4584729669454184}
---- !u!114 &114215721231813880
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1067698721582444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68ceabd1b60683d4bb47de9af1ea0769, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114255881132932324
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1524,7 +1512,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c13735a5513d994c9375aadd515f332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Crosshair
+  title: Crosshairs
   spawnManager: {fileID: 114107063087982806}
 --- !u!114 &114366038683398672
 MonoBehaviour:
