@@ -56,7 +56,7 @@ public class RopeController : MonoBehaviour
         ropes.Clear();
     }
 
-    public void AttachRope(Vector2 position, NinjaController newBody)
+    public void AttachRope(Vector2 position, NinjaController newBody, Rigidbody2D body = null)
     {
         ropeNodes = new List<RopeNode>();
         ropeNodeDistance = ropeNodePrefab.GetComponent<DistanceJoint2D>().distance;
@@ -83,7 +83,16 @@ public class RopeController : MonoBehaviour
 
         var last = ropeNodes[ropeNodes.Count - 1];
         last.transform.position = position;
-        last.AnchoredJoint2D.connectedAnchor = position;
+        if (body == null)
+        {
+            last.AnchoredJoint2D.connectedAnchor = position;
+        }
+        else
+        {
+            last.AnchoredJoint2D.connectedBody = body;
+            last.AnchoredJoint2D.connectedAnchor = body.transform.InverseTransformPoint(position);
+
+        }
         last.enabled = true;
 
         isAttached = true;
@@ -177,7 +186,10 @@ public class RopeController : MonoBehaviour
         var last = ropeNodes[ropeNodes.Count - 1];
         var secondlast = ropeNodes[ropeNodes.Count - 2];
         secondlast.AnchoredJoint2D.connectedAnchor = last.AnchoredJoint2D.connectedAnchor;
-        secondlast.AnchoredJoint2D.connectedBody = null;
+
+        var body = last.AnchoredJoint2D.connectedBody;
+        secondlast.AnchoredJoint2D.connectedBody = body ?? null;
+
         ropeNodes.Remove(last);
         Destroy(last.gameObject);
     }

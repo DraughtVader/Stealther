@@ -294,7 +294,8 @@ public class NinjaController : MonoBehaviour
             audioSource.PlayOneShot(rope);
             if (rayHits.transform != null)
             {
-                ropeController.AttachRope(rayHits.point, this);
+                var targetRigidbody = rayHits.transform.GetComponent<Rigidbody2D>();
+                ropeController.AttachRope(rayHits.point, this, targetRigidbody);
                 anchoredJoint2D.enabled = true;
                 rigidbody.AddForce(direction.normalized);
             }

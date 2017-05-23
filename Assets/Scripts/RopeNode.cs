@@ -39,7 +39,7 @@ public class RopeNode : MonoBehaviour
 
     private void Update()
     {
-        if (anchoredJoint2D.connectedBody == null)
+        if (anchoredJoint2D.connectedBody == null || anchoredJoint2D.connectedBody.GetComponent<RopeNode>() == null)
         {
             return;
         }
