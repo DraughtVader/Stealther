@@ -57,6 +57,7 @@ public class NinjaController : MonoBehaviour
     [SerializeField]
     protected Transform aimingTransform;
 
+
     [SerializeField]
     protected ParticleSystem stunPfx,
         phasePfx,
@@ -77,7 +78,11 @@ public class NinjaController : MonoBehaviour
     [SerializeField]
     protected SpriteRenderer headSprite,
         hatSprite,
-        bodySprite;
+        bodySprite,
+        aimingTarget,
+        invalidAimingTarget;
+
+
     public Color NinjaColor
     {
         get { return Description.Color; }
@@ -219,8 +224,33 @@ public class NinjaController : MonoBehaviour
     private void Aiming()
     {
         aimingTransform.gameObject.SetActive(input.RightStick.magnitude > 0.1f);
-        float angle = Mathf.Atan2(input.RightStick.x, input.RightStick.y) * 180.0f / Mathf.PI;
+        var angle = Mathf.Atan2(input.RightStick.x, input.RightStick.y) * 180.0f / Mathf.PI;
         aimingTransform.eulerAngles = new Vector3(0, 0, -angle);
+
+        if (input.RightStick.magnitude > 0.2f)
+        {
+            aimingTarget.gameObject.SetActive(true);
+            var direction = input.RightStick;
+            var rayHits = Physics2D.Raycast(transform.position, direction, 10.0f,
+                1 << LayerMask.NameToLayer("Ropables"));
+            if (rayHits.transform != null)
+            {
+                aimingTarget.enabled = true;
+                aimingTarget.transform.position = rayHits.point;
+                aimingTarget.color = NinjaColor;
+            }
+            else
+            {
+                aimingTarget.enabled = false;
+                aimingTarget.transform.position = transform.position + (Vector3)(direction.normalized * 10);
+                invalidAimingTarget.color = NinjaColor;
+            }
+            invalidAimingTarget.gameObject.SetActive(rayHits.transform == null);
+        }
+        else
+        {
+            aimingTarget.gameObject.SetActive(false);
+        }
     }
 
     private void Attacking()
@@ -436,7 +466,6 @@ public class NinjaController : MonoBehaviour
 
     private void OnRoundEnd()
     {
-        State = NinjaState.WaitingToPlay;
         ammoType = AmmoType.Normal;
         Shield = ShieldType.None;
         phasePfx.Stop();
