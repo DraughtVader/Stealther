@@ -25,15 +25,28 @@ public class GameInputManager : MonoBehaviour
             return;
         }
 
-        var inputDevice = InputManager.ActiveDevice;
+        var inputDevice = InputManager.ActiveDevice as XInputDevice;
+        if (inputDevice == null)
+        {
+            return;
+        }
 
-        if (UpButtonWasPressedOnDevice(inputDevice))
+        if (UpButtonWasPressedOnDevice(inputDevice) && IsNinjaInReady(inputDevice))
         {
             GameManager.Instance.UpButtonPress();
         }
-        else if (DownButtonWasPressedOnDevice(inputDevice))
+        else if (DownButtonWasPressedOnDevice(inputDevice) && IsNinjaInReady(inputDevice))
         {
             GameManager.Instance.DownButtonPress();
+        }
+        
+        if (RightButtonWasPressedOnDevice(inputDevice) && IsNinjaInReady(inputDevice))
+        {
+            GameManager.Instance.RightButtonPress();
+        }
+        else if (LeftButtonWasPressedOnDevice(inputDevice) && IsNinjaInReady(inputDevice))
+        {
+            GameManager.Instance.LeftButtonPress();
         }
 
         if (BButtonWasPressedOnDevice(inputDevice))
@@ -71,6 +84,16 @@ public class GameInputManager : MonoBehaviour
     {
         return inputDevice.DPadDown.WasPressed;
     }
+    
+    private bool LeftButtonWasPressedOnDevice( InputDevice inputDevice )
+    {
+        return inputDevice.DPadLeft.WasPressed;
+    }
+
+    private bool RightButtonWasPressedOnDevice( InputDevice inputDevice )
+    {
+        return inputDevice.DPadRight.WasPressed;
+    }
 
     private bool BButtonWasPressedOnDevice( InputDevice inputDevice )
     {
@@ -87,5 +110,11 @@ public class GameInputManager : MonoBehaviour
     {
         var xinput = inputDevice as XInputDevice;
         players[xinput.DeviceIndex].AssignInput(null);
+    }
+
+    private bool IsNinjaInReady(XInputDevice inputDevice)
+    {
+        return players[inputDevice.DeviceIndex].GetComponent<NinjaController>().State ==
+               NinjaController.NinjaState.Ready;
     }
 }

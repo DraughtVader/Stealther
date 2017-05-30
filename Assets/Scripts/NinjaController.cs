@@ -213,6 +213,7 @@ public class NinjaController : MonoBehaviour
         {
             Shield = ShieldType.None;
             phaseShieldPfx.Stop();
+            phaseShieldPfx.Clear();
         }
     }
 
@@ -503,13 +504,18 @@ public class NinjaController : MonoBehaviour
                 phasePfx.Play();
                 break;
             case global::PickUp.Type.PhaseShield:
-                Shield = ShieldType.Phase;
-                shieldUpTime = 5.0f;
-                phaseShieldPfx.Play();
+                StartShield(5.0f);
                 break;
             default:
                 throw new ArgumentOutOfRangeException("type", type, null);
         }
+    }
+
+    public void StartShield(float upTime)
+    {
+        Shield = ShieldType.Phase;
+        shieldUpTime = upTime;
+        phaseShieldPfx.Play();
     }
 
     private void StopParticleSystem(ParticleSystem particleSys, bool destroyRemainingParticles)

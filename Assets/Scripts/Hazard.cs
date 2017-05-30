@@ -31,12 +31,18 @@ public class Hazard : MonoBehaviour
         var ninja = other.GetComponent<NinjaController>();
         if (ninja != null && ninja.IsKillable)
         {
-            Vector2 position = ninja.transform.position;
-            ninja.Killed();
-            OnKilledNinja(ninja);
-            GameManager.Instance.NinjaKilled(ninja, position);
+            NinjaKilled(ninja);
         }
     }
+
+    protected virtual void NinjaKilled(NinjaController killedNinja)
+    {
+        Vector2 position = killedNinja.transform.position;
+        killedNinja.Killed();
+        OnKilledNinja(killedNinja);
+        GameManager.Instance.NinjaKilled(killedNinja, position);
+    }
+    
 
     protected virtual void OnKilledNinja(NinjaController ninja)
     {

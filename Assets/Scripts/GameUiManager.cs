@@ -56,28 +56,41 @@ public class GameUiManager : MonoBehaviour
 
     [SerializeField]
     protected Text scoreText,
-        countdownText;
+        countdownText,
+        modeText;
 
     [SerializeField]
     protected PlayerUI[] playerUI;
+    
+    [SerializeField]
+    protected ParticleSystem confettiParticleSystem;
 
     private float currentCountDown;
     private Action onCountDownComplete;
     private const string COLOUR_ID = " <color=#{0}>*</color> ";
     private bool matchCompete, newOnComplete;
 
-    public void DisplayScores(Dictionary<NinjaController, int> competingNinjas)
+    public void DisplayScores(List<ParticipatingNinja> participatingNinja)
     {
-        scoreText.text = GetScoresAsString(competingNinjas);
+        PlayConfetti(GetWinner(participatingNinja));
+        scoreText.text = GetScoresAsString(participatingNinja);
         matchCompete = false;
         StartCountDown(ShowScorePanel, false, 2.0f);
     }
 
-    public void DisplayFinalScores(Dictionary<NinjaController, int> competingNinjas)
+    public void DisplayFinalScores(List<ParticipatingNinja> participatingNinja)
     {
-        scoreText.text = GetFinalScoresAsString(competingNinjas);
+        PlayConfetti(GetWinner(participatingNinja));
+        scoreText.text = GetFinalScoresAsString(participatingNinja);
         matchCompete = true;
         StartCountDown(ShowScorePanel, false, 2.0f);
+    }
+
+    private void PlayConfetti(NinjaController winner)
+    {
+        var settings = confettiParticleSystem.main;
+        settings.startColor = winner.NinjaColor;
+        confettiParticleSystem.Play();
     }
 
     private void ShowScorePanel()
@@ -140,6 +153,7 @@ public class GameUiManager : MonoBehaviour
 
     private void Update()
     {
+        newOnComplete = false;
         if (onCountDownComplete != null)
         {
             currentCountDown -= Time.deltaTime;
@@ -154,7 +168,6 @@ public class GameUiManager : MonoBehaviour
                 onCountDownComplete = null;
                 countdownText.gameObject.SetActive(false);
             }
-            newOnComplete = false;
         }
     }
 
@@ -168,30 +181,37 @@ public class GameUiManager : MonoBehaviour
         Instance = null;
     }
 
-    protected string GetScoresAsString(Dictionary<NinjaController, int> competingNinjas)
+    protected string GetScoresAsString(List<ParticipatingNinja> participatingNinjas)
     {
         var scoresSb = new StringBuilder();
-        var ordered = competingNinjas.OrderByDescending(x => x.Value);
+        var ordered = participatingNinjas.OrderByDescending(x => x.Score);
         var size = 60;
-        foreach (var entry in ordered)
+        foreach (var participatingNinja in ordered)
         {
-            scoresSb.AppendFormat("{3}<size={0}>{1} - {2}</size>{3}\n", size, entry.Key.NinjaName, entry.Value, string.Format(COLOUR_ID, entry.Key.Description.Color.ToHex()));
+            var ninja = participatingNinja.Ninja;
+            scoresSb.AppendFormat("{3}<size={0}>{1} - {2}</size>{3}\n", size, ninja.NinjaName, participatingNinja.Score, string.Format(COLOUR_ID, ninja.Description.Color.ToHex()));
             size -= 10;
         }
         scoresSb.Remove(scoresSb.Length - 2, 2); //remove the last "\n" added
         return scoresSb.ToString();
     }
 
-    protected string GetFinalScoresAsString(Dictionary<NinjaController, int> competingNinjas)
+    protected string GetFinalScoresAsString(List<ParticipatingNinja> participatingNinjas)
     {
         var scoresSb = new StringBuilder();
-        var ordered = competingNinjas.OrderByDescending(x => x.Value);
-        foreach (var entry in ordered)
+        var ordered = participatingNinjas.OrderByDescending(x => x.Score);
+        foreach (var participatingNinja in ordered)
         {
-            scoresSb.AppendFormat("{2}<size={0}>{1} wins!</size>{2}", 60, entry.Key.NinjaName, string.Format(COLOUR_ID, entry.Key.Description.Color.ToHex()));
+            var ninja = participatingNinja.Ninja;
+            scoresSb.AppendFormat("{2}<size={0}>{1} wins!</size>{2}", 60, ninja.NinjaName, string.Format(COLOUR_ID, ninja.Description.Color.ToHex()));
             break;
         }
         return scoresSb.ToString();
+    }
+
+    protected NinjaController GetWinner(List<ParticipatingNinja> participatingNinjas)
+    {
+        return participatingNinjas.OrderByDescending(x => x.Score).FirstOrDefault().Ninja;
     }
 
     public void StartGameCountDown()
@@ -202,6 +222,11 @@ public class GameUiManager : MonoBehaviour
     public void UpdateLevel(Level level)
     {
         levelTextPanel.GetComponentInChildren<Text>().text = level.Title;
+    }
+    
+    public void UpdateMode(ScoresManager scoresManager)
+    {
+        modeText.text = scoresManager.Mode.ToString();
     }
 
     public void BackToTitle()

@@ -33,13 +33,18 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     protected AudioClip start,
-        end;
+        end,
+        round;
 
-    protected Dictionary<NinjaController, int> competingNinjas = new Dictionary<NinjaController, int>();
-    protected List<NinjaController> aliveNinjas;
+    
+    [SerializeField]
+    protected ScoresManager[] scoreManagers;   
+    
+    private ScoresManager currentScoresManager;
     private AccessoryDescription[] ninjaBodies;
     private AudioSource audioSource;
     private Level currentLevel;
+    private List<NinjaController> participatingNinjas = new List<NinjaController>();
 
     public State GameState { get; set; }
 
@@ -47,7 +52,7 @@ public class GameManager : MonoBehaviour
 
     public void UpButtonPress()
     {
-        if (GameState == State.PlayerScreen && competingNinjas.Count > 0)
+        if (GameState == State.PlayerScreen && participatingNinjas.Count > 0)
         {
             PreviousLevel();
         }
@@ -55,24 +60,39 @@ public class GameManager : MonoBehaviour
 
     public void DownButtonPress()
     {
-        if (GameState == State.PlayerScreen && competingNinjas.Count > 0)
+        if (GameState == State.PlayerScreen && participatingNinjas.Count > 0)
         {
             NextLevel();
         }
     }
-
-    public void NinjaKilled(NinjaController ninja, Vector3 deathPosition)
+    
+    public void LeftButtonPress()
     {
-        aliveNinjas.Remove(ninja);
-        if (aliveNinjas.Count == 1)
+        if (GameState == State.PlayerScreen && participatingNinjas.Count > 0)
         {
-            AddScore(aliveNinjas[0]);
+            PreviousMode();
+        }
+    }
+
+    public void RightButtonPress()
+    {
+        if (GameState == State.PlayerScreen && participatingNinjas.Count > 0)
+        {
+            NextMode();
+        }
+    }
+
+    public void NinjaKilled(NinjaController killedNinja, Vector3 deathPosition, NinjaController killerNinja = null)
+    {
+        if (GameState == State.Playing)
+        {
+            currentScoresManager.NinjaKilled(killedNinja, killerNinja);
         }
 
         var blood = Instantiate(splatterPfx, deathPosition, Quaternion.identity);
-        blood.GetComponent<BloodSplatterFX>().SetUp(ninja.NinjaColor);
+        blood.GetComponent<BloodSplatterFX>().SetUp(killedNinja.NinjaColor);
         var accessoryDrop = Instantiate(accessoryDropPrefab, deathPosition, Quaternion.identity);
-        accessoryDrop.GetComponent<AccessoryDrop>().SetUp(ninja.HatSprite.sprite);
+        accessoryDrop.GetComponent<AccessoryDrop>().SetUp(killedNinja.HatSprite.sprite);
     }
 
     public void GetNextDescription(NinjaController ninja)
@@ -89,32 +109,32 @@ public class GameManager : MonoBehaviour
 
     public void AddPlayer(NinjaController ninja)
     {
-        competingNinjas.Add(ninja, 0);
+        participatingNinjas.Add(ninja);
         ninja.Description = ninjaPicker.GetDescription();
         ninja.HatSprite.sprite = ninjaPicker.GetNextHat().Sprite;
-        ninja.SetUpBody(ninjaBodies[competingNinjas.Count - 1]);
+        ninja.SetUpBody(ninjaBodies[participatingNinjas.Count - 1]);
         GameUiManager.Instance.AddPlayer(ninja);
         pregameManger.PlayerJoined(ninja);
-        if (competingNinjas.Count == 1)
+        if ( participatingNinjas.Count == 1)
         {
             PickLevel();
         }
     }
 
-    public void AddScore(NinjaController ninja)
+    public void RoundEnded()
     {
-        competingNinjas[ninja]++;
-        if (competingNinjas[ninja] >= targerWins)
+        GameState = State.RoundScore;
+        audioSource.PlayOneShot(round);
+        if (RoundEnd != null)
         {
-            GameUiManager.Instance.DisplayFinalScores(competingNinjas);
-            GameState = State.MatchScore;
-            audioSource.PlayOneShot(end);
+            RoundEnd();
         }
-        else
-        {
-            GameUiManager.Instance.DisplayScores(competingNinjas);
-            GameState = State.RoundScore;
-        }
+    }
+    
+    public void FinalRoundEnded()
+    {
+        GameState = State.MatchScore;
+        audioSource.PlayOneShot(end);
         if (RoundEnd != null)
         {
             RoundEnd();
@@ -123,26 +143,29 @@ public class GameManager : MonoBehaviour
 
     public NinjaController GetClosestNinja(Vector3 position)
     {
-        if (aliveNinjas == null || aliveNinjas.Count <= 1)
+        if (currentScoresManager.AliveNinjas == null || currentScoresManager.AliveNinjas.Count <= 1)
         {
             return null;
         }
 
-        int clostestIndex = 0,
-            length = aliveNinjas.Count;
-        var closestDistance = Vector2.Distance(position, aliveNinjas[0].transform.position);
+        int clostestIndex = -1,
+            length = currentScoresManager.AliveNinjas.Count;
+        var closestDistance = float.MaxValue;
 
-        for (var i = 1; i < length; i++)
+        for (var i = 0; i < length; i++)
         {
-            var currentDistance = Vector2.Distance(position, aliveNinjas[i].transform.position);
+            if (currentScoresManager.AliveNinjas[i].Shield != NinjaController.ShieldType.None)
+            {
+                continue;
+            }
+            var currentDistance = Vector2.Distance(position, currentScoresManager.AliveNinjas[i].transform.position);
             if (currentDistance < closestDistance)
             {
                 closestDistance = currentDistance;
                 clostestIndex = i;
             }
         }
-        return aliveNinjas[clostestIndex];
-
+        return clostestIndex == -1 ? null : currentScoresManager.AliveNinjas[clostestIndex];
     }
 
     public void StartRound()
@@ -152,22 +175,12 @@ public class GameManager : MonoBehaviour
             level.gameObject.SetActive(false);
         }
         currentLevel.gameObject.SetActive(true);
-        pregameManger.End();
 
         RopeController.DestroyAllRopes();
 
-        var spawnPoints = currentLevel.SpawnManager.SpawnPoints;
         GameUiManager.Instance.HideAll();
-        aliveNinjas = competingNinjas.Keys.ToList();
-        var length = aliveNinjas.Count;
-        for (var i = 0; i < length; i++)
-        {
-            var item = aliveNinjas[i];
-            item.gameObject.SetActive(true);
-            item.State = NinjaController.NinjaState.Alive;
-            item.transform.position = spawnPoints[i].position;
-        }
-
+        currentScoresManager.Spawner = currentLevel.SpawnManager;
+       
         if (RoundStart != null)
         {
             RoundStart();
@@ -186,19 +199,12 @@ public class GameManager : MonoBehaviour
 
         RopeController.DestroyAllRopes();
 
-        foreach (var item in competingNinjas)
-        {
-            item.Key.transform.position = new Vector3(100, 100); //TODO tidy
-            item.Key.Rigidbody.isKinematic = true;
-            item.Key.Rigidbody.velocity = Vector2.zero;
-        }
-
-        competingNinjas.Clear();
         ninjaBodies = ninjaPicker.GetBodies(4);
 
         GameState = State.PlayerScreen;
         BloodSplatterFX.DestroyAll();
         currentLevel.gameObject.SetActive(false);
+        participatingNinjas.Clear();
     }
 
     protected virtual void Awake()
@@ -219,7 +225,9 @@ public class GameManager : MonoBehaviour
 
     public void StartFirstRound()
     {
+        currentScoresManager.AddNinjas(participatingNinjas);
         BloodSplatterFX.DestroyAll();
+        pregameManger.End();
         StartRound();
     }
 
@@ -227,6 +235,8 @@ public class GameManager : MonoBehaviour
     {
         currentLevel = levels[Random.Range(0, levels.Length)];
         GameUiManager.Instance.UpdateLevel(currentLevel);
+        currentScoresManager = scoreManagers[0];
+        GameUiManager.Instance.UpdateMode(currentScoresManager);
     }
 
     private void NextLevel()
@@ -241,5 +251,19 @@ public class GameManager : MonoBehaviour
         var index = Array.IndexOf(levels, currentLevel);
         currentLevel = index == 0  ? levels[levels.Length-1] : levels[index - 1];
         GameUiManager.Instance.UpdateLevel(currentLevel);
+    }
+    
+    private void NextMode()
+    {
+        var index = Array.IndexOf(scoreManagers, currentScoresManager);
+        currentScoresManager = index == 0  ? scoreManagers[scoreManagers.Length-1] : scoreManagers[index - 1];
+        GameUiManager.Instance.UpdateMode(currentScoresManager);
+    }
+    
+    private void PreviousMode()
+    {
+        var index = Array.IndexOf(scoreManagers, currentScoresManager);
+        currentScoresManager = scoreManagers[(index + 1) % scoreManagers.Length];
+        GameUiManager.Instance.UpdateMode(currentScoresManager);
     }
 }

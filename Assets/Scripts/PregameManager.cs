@@ -21,6 +21,7 @@ public class PregameManager : MonoBehaviour
     }
 
     private Dictionary<NinjaController, bool> pregamers = new Dictionary<NinjaController, bool>();
+    private bool startedGame;
 
     public void PlayerJoined(NinjaController ninja)
     {
@@ -61,9 +62,10 @@ public class PregameManager : MonoBehaviour
             break;
         }
 
-        if (ready)
+        if (ready && !startedGame)
         {
             GameUiManager.Instance.StartGameCountDown();
+            startedGame = true;
         }
     }
 
@@ -87,5 +89,7 @@ public class PregameManager : MonoBehaviour
         {
             item.gameObject.SetActive(true);
         }
+        
+        startedGame = false;
     }
 }

@@ -18,7 +18,6 @@ public class NinjaStarController : Hazard
     protected void Update()
     {
         transform.eulerAngles += new Vector3(0, 0, rotationSpeed);
-
         SlowMo();
     }
 
@@ -32,6 +31,14 @@ public class NinjaStarController : Hazard
     {
         base.OnTriggerEnter2D(other);
         PostCollision(other.gameObject);
+    }
+
+    protected override void NinjaKilled(NinjaController killedNinja)
+    {
+        Vector2 position = killedNinja.transform.position;
+        killedNinja.Killed();
+        OnKilledNinja(killedNinja);
+        GameManager.Instance.NinjaKilled(killedNinja, position, Thrower);
     }
 
     private void SlowMo()
@@ -57,6 +64,7 @@ public class NinjaStarController : Hazard
 
     protected virtual void PostCollision(GameObject other)
     {
+        StopSlowMo();
         var star = other.GetComponent<NinjaStarController>();
         if (star != null && collisionPfxPrefab != null)
         {
@@ -75,7 +83,6 @@ public class NinjaStarController : Hazard
         {
             Destroy(gameObject);
         }
-
     }
 
     private void OnDestroy()
