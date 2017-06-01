@@ -5,7 +5,7 @@ using UnityEngine;
 public class Target : MonoBehaviour
 {
     [SerializeField]
-    protected BloodSplatterFX splatterPfx;
+    protected BloodSplatterEffect splatterEffect;
 
     [SerializeField]
     protected PregameManager pregameManager;
@@ -15,16 +15,17 @@ public class Target : MonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponent<NinjaStarController>() != null)
+        var star = other.GetComponent<NinjaStarController>();
+        if (star != null)
         {
-            OnDestroyed();
+            OnDestroyed(star);
         }
     }
 
-    private void OnDestroyed()
+    private void OnDestroyed(Hazard star)
     {
-        var spaltter = Instantiate(splatterPfx, transform.position, Quaternion.identity);
-        spaltter.SetUp(ninja.NinjaColor);
+        var spaltter = Instantiate(splatterEffect, transform.position, Quaternion.identity);
+        spaltter.SetUp(ninja.NinjaColor, star, transform.position);
         pregameManager.PlayerReady(ninja);
         gameObject.SetActive(false);
     }

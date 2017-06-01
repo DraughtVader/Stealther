@@ -19,11 +19,10 @@ public class GameManager : MonoBehaviour
     protected int targerWins = 5;
 
     [SerializeField]
-    protected GameObject splatterPfx,
-        accessoryDropPrefab;
+    protected GameObject accessoryDropPrefab;
 
     [SerializeField]
-    protected SlowMoController slowMoController;
+    protected BloodSplatterEffect bloodSplatterPrefab;
 
     [SerializeField]
     protected NinjaPickerManager ninjaPicker;
@@ -89,10 +88,14 @@ public class GameManager : MonoBehaviour
             currentScoresManager.NinjaKilled(killedNinja, killerNinja);
         }
 
-        var blood = Instantiate(splatterPfx, deathPosition, Quaternion.identity);
-        blood.GetComponent<BloodSplatterFX>().SetUp(killedNinja.NinjaColor);
         var accessoryDrop = Instantiate(accessoryDropPrefab, deathPosition, Quaternion.identity);
         accessoryDrop.GetComponent<AccessoryDrop>().SetUp(killedNinja.HatSprite.sprite);
+    }
+
+    public void CreateSplatterEffect(Vector2 position, Hazard hazard, Color color)
+    {
+        var blood = Instantiate(bloodSplatterPrefab, position, Quaternion.identity);
+        blood.SetUp(color, hazard, position);
     }
 
     public void GetNextDescription(NinjaController ninja)
@@ -202,7 +205,7 @@ public class GameManager : MonoBehaviour
         ninjaBodies = ninjaPicker.GetBodies(4);
 
         GameState = State.PlayerScreen;
-        BloodSplatterFX.DestroyAll();
+        BloodParticle.DestroyAll();
         currentLevel.gameObject.SetActive(false);
         participatingNinjas.Clear();
     }
@@ -226,7 +229,7 @@ public class GameManager : MonoBehaviour
     public void StartFirstRound()
     {
         currentScoresManager.AddNinjas(participatingNinjas);
-        BloodSplatterFX.DestroyAll();
+        BloodParticle.DestroyAll();
         pregameManger.End();
         StartRound();
     }

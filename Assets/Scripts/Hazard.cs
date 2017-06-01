@@ -7,7 +7,7 @@ public class Hazard : MonoBehaviour
 
     private AudioSource audioSource;
 
-    private void Start()
+    protected virtual void Start()
     {
         audioSource = GetComponent<AudioSource>();
     }
@@ -37,15 +37,16 @@ public class Hazard : MonoBehaviour
 
     protected virtual void NinjaKilled(NinjaController killedNinja)
     {
+        OnKilledNinja(killedNinja);
         Vector2 position = killedNinja.transform.position;
         killedNinja.Killed();
-        OnKilledNinja(killedNinja);
         GameManager.Instance.NinjaKilled(killedNinja, position);
     }
     
 
     protected virtual void OnKilledNinja(NinjaController ninja)
     {
+        GameManager.Instance.CreateSplatterEffect(ninja.transform.position, this, ninja.NinjaColor);
         if (audioSource != null && sfxClip != null)
         {
             audioSource.PlayOneShot(sfxClip);

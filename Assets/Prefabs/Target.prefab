@@ -136,7 +136,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1505354638426146}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.08, y: 7.07, z: 0}
+  m_LocalPosition: {x: -15, y: 5.26, z: 0}
   m_LocalScale: {x: 0.2637558, y: 0.2637558, z: 0.2637558}
   m_Children:
   - {fileID: 4532248969549332}
@@ -284,11 +284,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afd10d7633a57804ea2f59aaa7f30165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  splatterPfx: {fileID: 114391528205754610, guid: 1ddc70638d804b943ad65414373a2678,
+  splatterEffect: {fileID: 114473804883430640, guid: 0576304ab31d93846a5de3779a916067,
     type: 2}
   pregameManager: {fileID: 0}
   ninja: {fileID: 0}
-  bloodColour: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!114 &114278253296388148
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -332,10 +331,10 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Kill for ready
+  m_Text: Shoot for ready
 --- !u!212 &212058750959442860
 SpriteRenderer:
   m_ObjectHideFlags: 1

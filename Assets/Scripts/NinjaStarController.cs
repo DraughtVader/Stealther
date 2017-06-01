@@ -14,6 +14,8 @@ public class NinjaStarController : Hazard
 
     public NinjaController Thrower { get; set; }
 
+    public Rigidbody2D Rigidbody2D { get; private set; }
+
 
     protected void Update()
     {
@@ -36,8 +38,8 @@ public class NinjaStarController : Hazard
     protected override void NinjaKilled(NinjaController killedNinja)
     {
         Vector2 position = killedNinja.transform.position;
-        killedNinja.Killed();
         OnKilledNinja(killedNinja);
+        killedNinja.Killed();
         GameManager.Instance.NinjaKilled(killedNinja, position, Thrower);
     }
 
@@ -100,4 +102,9 @@ public class NinjaStarController : Hazard
         SlowMoController.Instance.Current = null;
     }
 
+    protected override void Start()
+    {
+        base.Start();
+        Rigidbody2D = GetComponent<Rigidbody2D>();
+    }
 }

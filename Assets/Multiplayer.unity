@@ -1070,6 +1070,23 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 260681718}
+--- !u!1 &263778299 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1848200039648772, guid: 7a3b404f4f27115488718aa814f9761f,
+    type: 2}
+  m_PrefabInternal: {fileID: 1872670891}
+--- !u!114 &263778300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 263778299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bd9ad7f9238ba34eaab88a742effa94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  setParent: 1
 --- !u!1 &266835476
 GameObject:
   m_ObjectHideFlags: 0
@@ -4292,6 +4309,23 @@ SpriteRenderer:
   m_Color: {r: 0.33823532, g: 0.2447232, b: 0.104455024, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!1 &1185720903 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1087811334844906, guid: 7a3b404f4f27115488718aa814f9761f,
+    type: 2}
+  m_PrefabInternal: {fileID: 1872670891}
+--- !u!114 &1185720904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1185720903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bd9ad7f9238ba34eaab88a742effa94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  setParent: 1
 --- !u!1001 &1204310324
 Prefab:
   m_ObjectHideFlags: 0
@@ -5524,7 +5558,7 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1398800690}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -10100,21 +10134,6 @@ Prefab:
       propertyPath: ninja
       value: 
       objectReference: {fileID: 1454615979}
-    - target: {fileID: 114357155272996884, guid: 827d95d2b8cec7a4aacba413ce9dcc5e,
-        type: 2}
-      propertyPath: m_Text
-      value: Shoot for ready
-      objectReference: {fileID: 0}
-    - target: {fileID: 114357155272996884, guid: 827d95d2b8cec7a4aacba413ce9dcc5e,
-        type: 2}
-      propertyPath: m_FontData.m_VerticalOverflow
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114357155272996884, guid: 827d95d2b8cec7a4aacba413ce9dcc5e,
-        type: 2}
-      propertyPath: m_FontData.m_HorizontalOverflow
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 827d95d2b8cec7a4aacba413ce9dcc5e, type: 2}
   m_IsPrefabParent: 0
@@ -10308,11 +10327,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targerWins: 3
-  splatterPfx: {fileID: 1008625961292662, guid: 1ddc70638d804b943ad65414373a2678,
-    type: 2}
   accessoryDropPrefab: {fileID: 1069183249495196, guid: 402bac462c3e29e4cbfbdf3a32b702cb,
     type: 2}
-  slowMoController: {fileID: 0}
+  bloodSplatterPrefab: {fileID: 114473804883430640, guid: 0576304ab31d93846a5de3779a916067,
+    type: 2}
   ninjaPicker: {fileID: 1800793849}
   pregameManger: {fileID: 858978376}
   start: {fileID: 8300000, guid: 1f94f79198008fc41a6ac03642bdafa5, type: 3}
@@ -10539,6 +10557,23 @@ SpriteRenderer:
   m_Color: {r: 0.33823532, g: 0.2447232, b: 0.104455024, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!1 &1825575963 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1577754121377878, guid: 7a3b404f4f27115488718aa814f9761f,
+    type: 2}
+  m_PrefabInternal: {fileID: 1872670891}
+--- !u!114 &1825575964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1825575963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bd9ad7f9238ba34eaab88a742effa94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  setParent: 1
 --- !u!1001 &1848586394
 Prefab:
   m_ObjectHideFlags: 0
@@ -10742,7 +10777,10 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114312080289331356, guid: 7a3b404f4f27115488718aa814f9761f, type: 2}
+    - {fileID: 114338380689188788, guid: 7a3b404f4f27115488718aa814f9761f, type: 2}
+    - {fileID: 114391416416674958, guid: 7a3b404f4f27115488718aa814f9761f, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 7a3b404f4f27115488718aa814f9761f, type: 2}
   m_IsPrefabParent: 0
 --- !u!114 &1872670892 stripped

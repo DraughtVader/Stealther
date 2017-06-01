@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PhaseNinjaStar :NinjaStarController
+public class PhaseNinjaStar : NinjaStarController
 {
     protected override void PostCollision(GameObject other)
     {
