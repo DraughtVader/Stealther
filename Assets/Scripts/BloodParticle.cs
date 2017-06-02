@@ -6,6 +6,9 @@ public class BloodParticle : MonoBehaviour
 {
 	[SerializeField]
 	protected GameObject bloodSplatter;
+
+	[SerializeField]
+	protected Sprite[] sprites;
 	
 	private Color currentColor = Color.white;
 	
@@ -14,9 +17,16 @@ public class BloodParticle : MonoBehaviour
 
 	public void SetUp(Color color, Vector2 velocity)
 	{
-		GetComponentInChildren<TrailRenderer>().material.color = currentColor = color;
-		GetComponent<SpriteRenderer>().color = currentColor = color;
-		GetComponent<Rigidbody2D>().velocity = velocity;
+		var s = GetComponent<SpriteRenderer>();
+		s.color = currentColor = color;
+		s.sprite = sprites[Random.Range(0, sprites.Length)];
+		
+		var r = GetComponent<Rigidbody2D>();
+		r.velocity = velocity;
+		
+		var random = Random.Range(0.1f, 1.25f);
+		transform.localScale *= random ;
+		transform.eulerAngles = new Vector3(0, 0, Random.Range(0, 359f));
 	}
 	
 	private void OnTriggerEnter2D(Collider2D other)

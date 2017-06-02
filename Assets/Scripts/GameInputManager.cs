@@ -114,7 +114,6 @@ public class GameInputManager : MonoBehaviour
 
     private bool IsNinjaInReady(XInputDevice inputDevice)
     {
-        return players[inputDevice.DeviceIndex].GetComponent<NinjaController>().State ==
-               NinjaController.NinjaState.Ready;
+        return players[inputDevice.DeviceIndex].GetComponent<NinjaController>().State == NinjaState.Ready;
     }
 }

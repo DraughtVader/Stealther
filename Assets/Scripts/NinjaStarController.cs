@@ -79,6 +79,19 @@ public class NinjaStarController : Hazard
         {
             return;
         }
+        
+        var saw = other.GetComponent<RotatingHazard>();
+        if (saw != null)
+        {
+            Vector2 velocity = Rigidbody2D.velocity,
+                    tangent = Quaternion.Euler(0, 0, 90) * (transform.position - other.transform.position);
+            var angle = Vector2.Angle(velocity, tangent);
+            Vector2 newVelocity = Quaternion.Euler(0, 0, 360 - 2 * angle) * velocity;
+            Rigidbody2D.velocity = newVelocity * 1.25f;
+            var position = new Vector3((other.transform.position.x + transform.position.x) * 0.5f, (other.transform.position.y + transform.position.y) * 0.5f);
+            Instantiate(collisionPfxPrefab, position, Quaternion.identity);
+            return;
+        }
 
         var ninja = other.GetComponent<NinjaController>();
         if (ninja == null || ninja.DestroyProjectileOnHit)

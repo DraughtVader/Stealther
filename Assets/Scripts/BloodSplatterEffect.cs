@@ -36,7 +36,7 @@ public class BloodSplatterEffect : MonoBehaviour
         var star = hazard as NinjaStarController;
         if (star != null)
         {
-            var data = new BloodParticleData(Quaternion.Euler(0,0,Random.Range(-10.0f, 10.0f)) * (star.Rigidbody2D.velocity * Random.Range(0.5f, 0.75f)), ninjaPosition);
+            var data = new BloodParticleData(Quaternion.Euler(0,0,Random.Range(-40.0f, 40.0f)) * (star.Rigidbody2D.velocity * Random.Range(0.1f, 0.75f)), ninjaPosition);
             return data;
         }
         var saw = hazard as RotatingHazard;
@@ -45,7 +45,7 @@ public class BloodSplatterEffect : MonoBehaviour
             float speed = saw.RotationSpeed;
             float angle = Random.Range(0.0f, 359.0f);
             Vector2 velocity = Quaternion.Euler(0, 0, angle) * new Vector2(speed * Random.Range(0.125f, 1.25f), 0);
-            Vector2 position = Quaternion.Euler(0, 0, angle) * new Vector2(saw.Radius + 0.1f, 0) + saw.transform.position;
+            Vector2 position = Quaternion.Euler(0, 0, angle) * new Vector2(saw.Radius * 1.1f, 0) + saw.transform.position;
             return new BloodParticleData(velocity, position);
         }
         return new BloodParticleData(Vector2.zero, Vector2.zero);

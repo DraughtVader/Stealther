@@ -92,21 +92,16 @@ public abstract class ScoresManager : MonoBehaviour
 
 	protected virtual void OnRoundStart()
 	{
-		var spawnPoints = Spawner.SpawnPoints;
 		var length = AliveNinjas.Count;
 		for (var i = 0; i < length; i++)
 		{
-			SpawnNinja(AliveNinjas[i], spawnPoints[i].position);
+			SpawnNinja(AliveNinjas[i]);
 		}
 	}
 
-	protected void SpawnNinja(NinjaController ninja, Vector2 spawnPosition)
+	protected void SpawnNinja(NinjaController ninja)
 	{
-		ninja.Rigidbody.velocity = Vector2.zero;
-		ninja.gameObject.SetActive(true);
-		ninja.Rigidbody.isKinematic = false;
-		ninja.State = NinjaController.NinjaState.Alive;
-		ninja.transform.position = spawnPosition;
+		Spawner.SpawnNinja(ninja);
 	}
 	
 	protected virtual void OnRoundEnd()

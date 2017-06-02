@@ -133,8 +133,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ec07423581c2fb4da0a4b365a7d727d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleNumber: 100
-  bloodParticle: {fileID: 114845825994349632, guid: 4e83984eaeb55f24cb2ea77fc3896b8c,
+  particleNumber: 50
+  bloodParticle: {fileID: 114986663993451244, guid: 4e83984eaeb55f24cb2ea77fc3896b8c,
     type: 2}
 --- !u!114 &114481911520803634
 MonoBehaviour:

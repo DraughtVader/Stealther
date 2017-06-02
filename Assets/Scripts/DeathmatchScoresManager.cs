@@ -30,8 +30,7 @@ public class DeathmatchScoresManager : ScoresManager
 		}
 		if (killer == null || GetNinja(killer).Score < targetScore)
 		{
-			SpawnNinja(killedNinja, Spawner.SpawnPoints[Random.Range(0, Spawner.SpawnPoints.Length)].position);
-			killedNinja.StartShield(3.0f);
+			Spawner.SpawnNinja(killedNinja, shieldOnSpawn:true);
 		}
 	}
 

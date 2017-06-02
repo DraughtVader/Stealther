@@ -3242,6 +3242,12 @@ MonoBehaviour:
   - {fileID: 4034703214382576}
   - {fileID: 4639357774290372}
   - {fileID: 4455494727909738}
+  ninjaSpawnerPrefab: {fileID: 114169250222079764, guid: ea6fa9bc374c7a54c9d9faed49ee155f,
+    type: 2}
+  safetyCastRadius: 1
+  unsafeLayers:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!114 &114095147106851434
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -1,13 +1,13 @@
 ﻿using System;
 using UnityEngine;
 
+public enum NinjaState
+{
+    NotPlaying, WaitingToJoin, WaitingToPlay, Alive, Dead, Stunned, Pregame, Ready, Spawning
+}
+
 public class NinjaController : MonoBehaviour
 {
-    public enum NinjaState
-    {
-        NotPlaying, WaitingToJoin, WaitingToPlay, Alive, Dead, Stunned, Pregame, Ready
-    }
-
     public enum AmmoType
     {
         Normal, Phase, Multiple, Ricochet
@@ -143,6 +143,15 @@ public class NinjaController : MonoBehaviour
             State = NinjaState.Dead;
             Detach();
         }
+    }
+
+    public void Spawn(Vector2 position)
+    {
+        Rigidbody.velocity = Vector2.zero;
+        gameObject.SetActive(true);
+        Rigidbody.isKinematic = false;
+        State = NinjaState.Alive;
+        transform.position = position;
     }
 
     public void SetToJoinable()
@@ -472,6 +481,8 @@ public class NinjaController : MonoBehaviour
         phasePfx.Stop();
         phaseShieldPfx.Stop();
         fatiguedPfx.Stop();
+        transform.position = new Vector3(100, 100);
+        rigidbody.isKinematic = true;
     }
 
     private void OnMatchFinished()

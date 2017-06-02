@@ -26,9 +26,8 @@ public class PregameManager : MonoBehaviour
     public void PlayerJoined(NinjaController ninja)
     {
         blockers[ninja.PlayerNumber].color = new Color(1, 1, 1, 0);
-        ninja.transform.position = spawnPoints.Points[ninja.PlayerNumber].position;
-        ninja.State = NinjaController.NinjaState.Pregame;
-        ninja.Rigidbody.isKinematic = false;
+        spawnPoints.SpawnNinja(ninja, ninja.PlayerNumber, NinjaState.Pregame);
+        ninja.State = NinjaState.Pregame;
 
         pregamers.Add(ninja, false);
     }
@@ -44,7 +43,7 @@ public class PregameManager : MonoBehaviour
     public void PlayerReady(NinjaController ninja)
     {
         pregamers[ninja] = true;
-        ninja.State = NinjaController.NinjaState.Ready;
+        ninja.State = NinjaState.Ready;
         GameUiManager.Instance.SetNinjaAsReady(ninja.PlayerNumber);
         if (pregamers.Count <= 1)
         {
