@@ -14,7 +14,7 @@ public class RotatingHazard : Hazard
 
     public float Radius
     {
-        get { return GetComponent<CircleCollider2D>().radius * transform.localScale.x; }
+        get { return GetComponent<CircleCollider2D>().radius * transform.lossyScale.x; }
     }
 
     protected void Update()

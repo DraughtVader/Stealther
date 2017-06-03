@@ -27,7 +27,6 @@ public class PregameManager : MonoBehaviour
     {
         blockers[ninja.PlayerNumber].color = new Color(1, 1, 1, 0);
         spawnPoints.SpawnNinja(ninja, ninja.PlayerNumber, NinjaState.Pregame);
-        ninja.State = NinjaState.Pregame;
 
         pregamers.Add(ninja, false);
     }

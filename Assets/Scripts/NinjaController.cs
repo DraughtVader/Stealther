@@ -179,7 +179,6 @@ public class NinjaController : MonoBehaviour
                 {
                     GameManager.Instance.AddPlayer(this);
                     SetUpColour();
-                    State = NinjaState.Pregame;
                 }
                 break;
             case NinjaState.WaitingToPlay:
@@ -557,6 +556,5 @@ public class NinjaController : MonoBehaviour
         }
         GameManager.Instance.AddPlayer(this);
         headSprite.color = aimingTransform.GetComponentInChildren<SpriteRenderer>().color = NinjaColor;
-        State = NinjaState.Pregame;
     }
 }
