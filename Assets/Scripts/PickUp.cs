@@ -12,12 +12,20 @@ public class PickUp : MonoBehaviour
     [SerializeField]
     protected Type type;
 
+    private PickUpSpawner spawner;
+
+    public void AssignSpawner(PickUpSpawner sickUpSpawner)
+    {
+        spawner = sickUpSpawner;
+    }
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
         var ninja = other.GetComponent<NinjaController>();
         if (ninja != null)
         {
             ninja.PickUp(type);
+            spawner.PickUpUsed(this);
             Destroy();
         }
     }

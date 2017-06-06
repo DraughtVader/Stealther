@@ -47,6 +47,11 @@ public class GameManager : MonoBehaviour
 
     public State GameState { get; set; }
 
+    public GameMode CurrentGameMode
+    {
+        get { return currentScoresManager.Mode; }
+    }
+
     public Level[] levels;
 
     public void UpButtonPress()

@@ -13,12 +13,23 @@ public class PickUpSpawner : MonoBehaviour
     [SerializeField]
     protected ParticleSystem revealPfx;
 
-    private DateTime spawnTime, revealPfxTime;
-    private bool pickUpSpawned, playedPfx;
+    [SerializeField]
+    protected float recuringCoolDown = 5.0f;
+
+    private DateTime spawnTime, revealPfxTime, recuringCoolDownTime;
+    private bool pickUpSpawned, playedPfx, pickupActive;
+    private bool recuring;
+    
+
+    public void PickUpUsed(PickUp pickup)
+    {
+        pickupActive = false;
+    }
 
     private void SetupSpawnTime()
     {
-        revealPfxTime = DateTime.Now.AddSeconds(Random.Range(spawnTimeRange.x, spawnTimeRange.y));
+        recuring = GameManager.Instance.CurrentGameMode == GameMode.Deathmatch;
+        revealPfxTime = DateTime.Now.AddSeconds(Random.Range(spawnTimeRange.x, spawnTimeRange.y) + (recuring ? recuringCoolDown : 0));
         spawnTime = revealPfxTime.AddSeconds(1f);
         pickUpSpawned = playedPfx = false;
     }
@@ -30,17 +41,24 @@ public class PickUpSpawner : MonoBehaviour
             if (DateTime.Now >= spawnTime)
             {
                 pickUpSpawned = true;
-                Instantiate(GetNextPickUp().Prefab, transform.position, Quaternion.identity);
+                var pickup = Instantiate(GetNextPickUp().Prefab, transform.position, Quaternion.identity);
+                pickup.GetComponent<PickUp>().AssignSpawner(this);
+                pickupActive = true;
             }
             else if (!playedPfx && DateTime.Now >= revealPfxTime)
             {
                 playedPfx = true;
                 revealPfx.Play();
             }
+            return;
+        }
+        if (recuring && pickUpSpawned && !pickupActive)
+        {
+            SetupSpawnTime();
         }
     }
 
-    private void Start()
+    private void Awake()
     {
         GameManager.Instance.RoundStart += SetupSpawnTime;
     }

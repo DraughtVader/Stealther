@@ -12,6 +12,7 @@ public class GameUiManager : MonoBehaviour
     [Serializable]
     public class PlayerUI
     {
+       
         public Text NinjaName;
 
         public GameObject JoinText,
@@ -46,6 +47,7 @@ public class GameUiManager : MonoBehaviour
         }
     }
 
+    public Action ScoresDisplayed;
     public static GameUiManager Instance;
 
     [SerializeField]
@@ -95,6 +97,10 @@ public class GameUiManager : MonoBehaviour
 
     private void ShowScorePanel()
     {
+        if (ScoresDisplayed != null)
+        {
+            ScoresDisplayed();
+        }
         scoresPanel.SetActive(true);
         if (matchCompete)
         {

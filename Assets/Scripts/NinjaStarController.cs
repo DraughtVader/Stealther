@@ -93,6 +93,18 @@ public class NinjaStarController : Hazard
             return;
         }
 
+        var blood = other.GetComponent<BloodParticle>();
+        if (blood != null)
+        {
+            return;
+        }
+        
+        var forceApplier = other.GetComponent<ForceApplyingCollider>();
+        if (forceApplier != null)
+        {
+            return;
+        }
+
         var ninja = other.GetComponent<NinjaController>();
         if (ninja == null || ninja.DestroyProjectileOnHit)
         {

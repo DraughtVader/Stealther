@@ -48,7 +48,7 @@ public class BloodSplatterEffect : MonoBehaviour
             Vector2 position = Quaternion.Euler(0, 0, angle) * new Vector2(saw.Radius * 1.1f, 0) + saw.transform.position;
             return new BloodParticleData(velocity, position);
         }
-        return new BloodParticleData(Vector2.zero, Vector2.zero);
+        return new BloodParticleData(Random.insideUnitCircle * 10, ninjaPosition);
     }
 
     public class BloodParticleData

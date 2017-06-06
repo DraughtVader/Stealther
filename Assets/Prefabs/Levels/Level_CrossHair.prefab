@@ -1608,8 +1608,9 @@ MonoBehaviour:
     Prefab: {fileID: 1830229822949586, guid: a667324d58103fb4e8e5f48cd3afed51, type: 2}
   - Type: 0
     Prefab: {fileID: 1830229822949586, guid: 027c11c6961ce624c8017cd45b0376f5, type: 2}
-  spawnTimeRange: {x: 1, y: 10}
+  spawnTimeRange: {x: 5, y: 10}
   revealPfx: {fileID: 198539295788690294}
+  recuringCoolDown: 10
 --- !u!114 &114661861880543440
 MonoBehaviour:
   m_ObjectHideFlags: 1

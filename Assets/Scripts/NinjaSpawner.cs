@@ -13,6 +13,7 @@ public class NinjaSpawner : MonoBehaviour
 	private NinjaController ninjaToSpawn;
 	private bool ninjaSpawned;
 	private NinjaState ninjaState;
+	private AudioSource audioSource;
 	
 	public void SetUp (NinjaController ninja, NinjaState stateOnSpawn) 
 	{
@@ -23,11 +24,12 @@ public class NinjaSpawner : MonoBehaviour
 		var settings = ps.main;
 		settings.startColor = ninja.NinjaColor;
 		ps.Play();
+		audioSource = GetComponent<AudioSource>();
 	}
 	
 	private void Update () 
 	{
-		if (ninjaSpawned && ps.particleCount == 0)
+		if (ninjaSpawned && ps.particleCount == 0 && audioSource.time <= 0)
 		{
 			Destroy(gameObject);
 		}

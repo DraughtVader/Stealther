@@ -475,6 +475,15 @@ public class NinjaController : MonoBehaviour
 
     private void OnRoundEnd()
     {
+    }
+
+    private void OnMatchFinished()
+    {
+        SetToJoinable();
+    }
+    
+    private void OnScoresDisplayed()
+    {
         ammoType = AmmoType.Normal;
         Shield = ShieldType.None;
         phasePfx.Stop();
@@ -484,11 +493,6 @@ public class NinjaController : MonoBehaviour
         rigidbody.isKinematic = true;
     }
 
-    private void OnMatchFinished()
-    {
-        SetToJoinable();
-    }
-
     protected void Start()
     {
         State = NinjaState.WaitingToJoin;
@@ -496,6 +500,7 @@ public class NinjaController : MonoBehaviour
         GameManager.Instance.RoundStart += OnRoundStart;
         GameManager.Instance.RoundEnd += OnRoundEnd;
         GameManager.Instance.MatchFinished += OnMatchFinished;
+        GameUiManager.Instance.ScoresDisplayed += OnScoresDisplayed;
     }
 
     protected void Awake()
