@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 60639759055769882}
   - component: {fileID: 114447537003157784}
   - component: {fileID: 114768709278593526}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 60376909487286596}
   - component: {fileID: 114147026603949320}
   - component: {fileID: 114493463484224412}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,7 +61,7 @@ GameObject:
   - component: {fileID: 60787492658998040}
   - component: {fileID: 114174767662657278}
   - component: {fileID: 114218011700509776}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 60945858681601904}
   - component: {fileID: 114231500801107966}
   - component: {fileID: 114381966227938046}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 60115231788439168}
   - component: {fileID: 114570983216754596}
   - component: {fileID: 114794359338470820}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ GameObject:
   - component: {fileID: 60822114966812048}
   - component: {fileID: 114059989025475732}
   - component: {fileID: 114141811473645792}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -222,7 +222,7 @@ GameObject:
   - component: {fileID: 60819171654630502}
   - component: {fileID: 114010930087868230}
   - component: {fileID: 114350938743920976}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -241,7 +241,7 @@ GameObject:
   - component: {fileID: 60180828670935554}
   - component: {fileID: 114900252340295910}
   - component: {fileID: 114427457198299086}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -276,7 +276,7 @@ GameObject:
   - component: {fileID: 60981853018774448}
   - component: {fileID: 114427974150797738}
   - component: {fileID: 114895681780652568}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -295,7 +295,7 @@ GameObject:
   - component: {fileID: 60832725477994602}
   - component: {fileID: 114119054003602144}
   - component: {fileID: 114444414044621464}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -314,7 +314,7 @@ GameObject:
   - component: {fileID: 60758806479572556}
   - component: {fileID: 114680175732680966}
   - component: {fileID: 114578776866505056}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -404,7 +404,7 @@ GameObject:
   - component: {fileID: 60274777812758850}
   - component: {fileID: 114150354160079450}
   - component: {fileID: 114633983369398670}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -423,7 +423,7 @@ GameObject:
   - component: {fileID: 60545348990326414}
   - component: {fileID: 114990652620748406}
   - component: {fileID: 114538766917744486}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -442,7 +442,7 @@ GameObject:
   - component: {fileID: 60171529954117590}
   - component: {fileID: 114178457875310746}
   - component: {fileID: 114130801857351412}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -479,7 +479,7 @@ GameObject:
   - component: {fileID: 60454289554604224}
   - component: {fileID: 114356984788754984}
   - component: {fileID: 114804516142766938}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -513,7 +513,7 @@ GameObject:
   - component: {fileID: 60248706988040378}
   - component: {fileID: 114447007709238248}
   - component: {fileID: 114456923553665872}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -585,7 +585,7 @@ GameObject:
   - component: {fileID: 60195445488702478}
   - component: {fileID: 114987010638571470}
   - component: {fileID: 114165369477278596}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -604,7 +604,7 @@ GameObject:
   - component: {fileID: 60109793037699544}
   - component: {fileID: 114875775466446580}
   - component: {fileID: 114510796345532948}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -623,7 +623,7 @@ GameObject:
   - component: {fileID: 60690400584585938}
   - component: {fileID: 114931439852129540}
   - component: {fileID: 114484797977839270}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -660,7 +660,7 @@ GameObject:
   - component: {fileID: 60204419675212696}
   - component: {fileID: 114826444419177278}
   - component: {fileID: 114651982399026480}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -679,7 +679,7 @@ GameObject:
   - component: {fileID: 60544416016296340}
   - component: {fileID: 114187021507169610}
   - component: {fileID: 114607310195183472}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -714,7 +714,7 @@ GameObject:
   - component: {fileID: 60826090833240462}
   - component: {fileID: 114093121864885408}
   - component: {fileID: 114812053712816042}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -733,7 +733,7 @@ GameObject:
   - component: {fileID: 60739815196991872}
   - component: {fileID: 114797504499193064}
   - component: {fileID: 114445318828759874}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -752,7 +752,7 @@ GameObject:
   - component: {fileID: 60387806674728150}
   - component: {fileID: 114059607682579486}
   - component: {fileID: 114726456014202358}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -824,7 +824,7 @@ GameObject:
   - component: {fileID: 60117305931706724}
   - component: {fileID: 114677398069737024}
   - component: {fileID: 114517063624802004}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -859,7 +859,7 @@ GameObject:
   - component: {fileID: 60349694086766544}
   - component: {fileID: 114110636934814286}
   - component: {fileID: 114591314171632692}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -893,7 +893,7 @@ GameObject:
   - component: {fileID: 60532268821452568}
   - component: {fileID: 114788320903981594}
   - component: {fileID: 114944515634615174}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -930,7 +930,7 @@ GameObject:
   - component: {fileID: 60411159538209864}
   - component: {fileID: 114388498964289924}
   - component: {fileID: 114420809141316548}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -949,7 +949,7 @@ GameObject:
   - component: {fileID: 60617978569883266}
   - component: {fileID: 114658087754400750}
   - component: {fileID: 114045198657753334}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -983,7 +983,7 @@ GameObject:
   - component: {fileID: 60544550780961430}
   - component: {fileID: 114085429842954324}
   - component: {fileID: 114665885083660394}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1002,7 +1002,7 @@ GameObject:
   - component: {fileID: 60102251444077726}
   - component: {fileID: 114951090428289704}
   - component: {fileID: 114984940618906220}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1039,7 +1039,7 @@ GameObject:
   - component: {fileID: 60499456381016820}
   - component: {fileID: 114941128548124616}
   - component: {fileID: 114256771398618774}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Spike (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
