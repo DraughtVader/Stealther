@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
     protected int targerWins = 5;
 
     [SerializeField]
-    protected GameObject accessoryDropPrefab;
+    protected GameObject accessoryDropPrefab,
+	backGroundBloodSplatterPrefab;
 
     [SerializeField]
     protected BloodSplatterEffect bloodSplatterPrefab;
@@ -95,6 +96,15 @@ public class GameManager : MonoBehaviour
 
         var accessoryDrop = Instantiate(accessoryDropPrefab, deathPosition, Quaternion.identity);
         accessoryDrop.GetComponent<AccessoryDrop>().SetUp(killedNinja.HatSprite.sprite);
+
+        CreateBackgroundBloodSplatter(deathPosition, killedNinja.NinjaColor);
+    }
+
+    public void CreateBackgroundBloodSplatter(Vector2 position, Color color)
+    {
+        var bgBlood =  Instantiate(backGroundBloodSplatterPrefab, position, Quaternion.Euler(0, 0, Random.value * 360));
+        color *= 0.85f;
+        bgBlood.GetComponent<SpriteRenderer> ().color = color;
     }
 
     public void CreateSplatterEffect(Vector2 position, Hazard hazard, Color color)

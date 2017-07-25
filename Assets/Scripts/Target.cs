@@ -28,6 +28,8 @@ public class Target : MonoBehaviour
         spaltter.SetUp(ninja.NinjaColor, star, transform.position);
         pregameManager.PlayerReady(ninja);
         gameObject.SetActive(false);
+        
+        GameManager.Instance.CreateBackgroundBloodSplatter(transform.position, ninja.NinjaColor);
     }
 
     private void Start()
